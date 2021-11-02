@@ -97,7 +97,7 @@ exports.update = (req, res) => {
           .catch((err) => {
             console.log(err);
             res.status(500).send({
-              error: 'Error updating Property with id=' + id,
+              error: 'Error updating User with id=' + id,
             });
           });
       } else {
