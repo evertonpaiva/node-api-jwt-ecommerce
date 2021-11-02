@@ -1,6 +1,5 @@
 const db = require('../models');
 const User = db.user;
-const Op = db.Sequelize.Op;
 
 // Format user data
 formatUser = (user) => {
