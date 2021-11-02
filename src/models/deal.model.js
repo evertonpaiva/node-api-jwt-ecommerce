@@ -41,6 +41,20 @@ module.exports = (sequelize, Sequelize) => {
     photos: {
       type: Sequelize.ARRAY(Sequelize.TEXT),
     },
+    userId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        // User hasMany Deals
+        model: 'users',
+        key: 'id',
+      },
+    },
   });
+
+  Deal.associate = (models) => {
+    Deal.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  };
+
   return Deal;
 };

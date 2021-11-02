@@ -3,10 +3,10 @@ const User = db.user;
 const Deal = db.deal;
 
 // Database inicialization
-exports.initial = () => {
+exports.initial = async () => {
   console.log('Setting initial data to database');
 
-  User.create({
+  let newUser = await User.create({
     name: 'Everton Paiva',
     email: 'evertonpaiva@gmail.com',
     login: 'evertonpaiva',
@@ -17,7 +17,14 @@ exports.initial = () => {
     city: 'Diamantina',
     state: 'MG',
     zip_code: 39100000,
-  });
+  })
+    .then((newUser) => {
+      console.log('User ' + newUser.get().id + ' created.');
+      return newUser.get();
+    })
+    .catch((err) => {
+      console.log('Error while user creation : ', err);
+    });
 
   Deal.create({
     type: '1 - Venda',
@@ -32,5 +39,12 @@ exports.initial = () => {
     zip_code: 39100000,
     urgency_type: '1 - Baixa',
     photos: ['coolemaster-1.jpg', 'coolemaster-2.jpg'],
-  });
+    userId: newUser.id,
+  })
+    .then((newDeal) => {
+      console.log('Deal ' + newDeal.get().id + ' created.');
+    })
+    .catch((err) => {
+      console.log('Error while deal creation : ', err);
+    });
 };
