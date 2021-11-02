@@ -7,7 +7,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   define: {
     timestamps: false,
   },
-  operatorsAliases: false,
+  operatorsAliases: 0,
 });
 
 const db = {};
@@ -18,6 +18,6 @@ db.sequelize = sequelize;
 
 db.user = require('./user.model.js')(sequelize, Sequelize);
 db.deal = require('./deal.model.js')(sequelize, Sequelize);
-//db.property = require("../models/property.model.js")(sequelize, Sequelize);
+db.bid = require('./bid.model.js')(sequelize, Sequelize);
 
 module.exports = db;
