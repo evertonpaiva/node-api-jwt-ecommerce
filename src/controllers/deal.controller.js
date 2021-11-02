@@ -27,7 +27,6 @@ formatDeal = (deal) => {
 
 // Find a deal by id
 exports.findOne = (req, res) => {
-  console.log('AQUI');
   const id = req.params.id;
 
   Deal.findByPk(id)
