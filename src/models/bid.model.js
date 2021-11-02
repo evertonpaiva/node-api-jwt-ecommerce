@@ -20,12 +20,15 @@ module.exports = (sequelize, Sequelize) => {
     },
     accepted: {
       type: Sequelize.BOOLEAN,
+      allowNull: false,
     },
     value: {
       type: Sequelize.DOUBLE,
+      allowNull: false,
     },
     description: {
       type: Sequelize.STRING,
+      allowNull: false,
     },
   });
 
