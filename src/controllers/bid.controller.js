@@ -78,6 +78,30 @@ exports.findByDeal = (req, res) => {
     });
 };
 
+// Create a new bid
+exports.create = (req, res) => {
+  const deal_id = req.params.deal_id;
+
+  // Save Bid to Database
+  Bid.create({
+    user_id: req.body.user_id,
+    accepted: req.body.accepted,
+    value: req.body.value,
+    description: req.body.description,
+    deal_id: deal_id,
+  })
+    .then((bid) => {
+      formattedBid = formatBid(bid);
+
+      res.send({
+        bid: formattedBid,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ error: err.message });
+    });
+};
+
 // Update a bid by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
