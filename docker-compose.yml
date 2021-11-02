@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: ./
+    container_name: ecommerce-web
+    volumes:
+      - .:/usr/src/app
+    command: npm run start:dev
+    ports:
+      - '9090:9090'
+    environment:
+      NODE_ENV: dev
+      PORT: 9090
+      DEBUG: nodejs-docker-express:*
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    container_name: ecommerce-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'ecommerce'
+      MYSQL_USER: 'ecommerce-user'
+      MYSQL_PASSWORD: 'RAnoP5244X9Aen5w8U6CKQ'
+      MYSQL_ROOT_PASSWORD: 'dsXyp7nOzgIBImJQtYUzYQ'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - ~/mysql/ecommerce:/var/lib/mysql
