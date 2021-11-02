@@ -69,6 +69,46 @@ exports.create = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(500).send({ message: err.message });
+      res.status(500).send({ error: err.message });
+    });
+};
+
+// Update a user by the id in the request
+exports.update = (req, res) => {
+  const id = req.params.id;
+
+  User.findByPk(id)
+    .then((data) => {
+      if (data) {
+        // update the record
+        User.update(req.body, {
+          where: { id: id },
+        })
+          .then((user) => {
+            // retrieve updated record from database
+            User.findByPk(id).then((updatedUser) => {
+              formattedUser = formatUser(updatedUser);
+
+              res.send({
+                user: formattedUser,
+              });
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).send({
+              error: 'Error updating Property with id=' + id,
+            });
+          });
+      } else {
+        res.status(404).send({
+          error: 'User with id=' + id + ' not found.',
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        error: 'Error retrieving User with id=' + id,
+      });
     });
 };
