@@ -4,7 +4,6 @@ const Deal = db.deal;
 // Format deal data
 formatDeal = (deal) => {
   return {
-    id: deal.id,
     type: deal.type,
     value: deal.value,
     description: deal.description,
@@ -47,6 +46,37 @@ exports.findOne = (req, res) => {
       res.status(500).send({
         error: 'Error retrieving Deal with id=' + id,
       });
+    });
+};
+
+// Create a new deal
+exports.create = (req, res) => {
+  // Save Deal to Database
+  Deal.create({
+    type: req.body.type,
+    value: req.body.value,
+    description: req.body.description,
+    trade_for: req.body.trade_for,
+    lat: req.body.lat,
+    lng: req.body.lng,
+    address: req.body.address,
+    city: req.body.city,
+    state: req.body.state,
+    zip_code: req.body.zip_code,
+    urgency_type: req.body.urgency_type,
+    urgency_limit_date: req.body.urgency_limit_date,
+    photos: req.body.photos,
+    user_id: req.userId,
+  })
+    .then((deal) => {
+      formattedDeal = formatDeal(deal);
+
+      res.send({
+        deal: formattedDeal,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ error: err.message });
     });
 };
 
