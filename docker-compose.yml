@@ -16,20 +16,14 @@ services:
     depends_on:
       - db
   db:
-    image: mysql:5.7
+    image: postgres:13.4
     container_name: ecommerce-db
     restart: always
     environment:
-      MYSQL_DATABASE: 'ecommerce'
-      MYSQL_USER: 'ecommerce-user'
-      MYSQL_PASSWORD: 'RAnoP5244X9Aen5w8U6CKQ'
-      MYSQL_ROOT_PASSWORD: 'dsXyp7nOzgIBImJQtYUzYQ'
+      - POSTGRES_DB=ecommerce
+      - POSTGRES_USER=ecommerce-user
+      - POSTGRES_PASSWORD=RAnoP5244X9Aen5w8U6CKQ
     ports:
-      # <Port exposed> : < MySQL Port running inside container>
-      - '3306:3306'
-    expose:
-      # Opens port 3306 on the container
-      - '3306'
-      # Where our data will be persisted
+      - '5440:5432'
     volumes:
-      - ~/mysql/ecommerce:/var/lib/mysql
+      - ~/postgres/ecommerce:/var/lib/postgresql/data
