@@ -2,6 +2,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+// set port, listen for requests
+const PORT = process.env.PORT || 9090;
+const RESET_DATABASE = process.env.RESET_DATABASE || false;
+
+// database
+const db = require('./models');
+const initial = require('./models/init-db').initial;
+
+// force: true will drop the table if it already exists
+db.sequelize.sync({ force: RESET_DATABASE }).then(() => {
+  console.log('Drop and Resync Database with { force: true }');
+
+  // populate initial data to database
+  if (RESET_DATABASE) {
+    initial();
+  }
+});
 
 var corsOptions = {
   origin: 'http://localhost:9090',
@@ -13,17 +30,6 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// database
-const db = require('./models');
-const Role = db.role;
-const User = db.user;
-
-// force: true will drop the table if it already exists
-db.sequelize.sync({ force: false }).then(() => {
-  console.log('Drop and Resync Database with { force: true }');
-  initial();
-});
-
 // simple route
 app.get('/', (req, res) => {
   res.json({ message: 'Express API is Ready' });
@@ -32,26 +38,9 @@ app.get('/', (req, res) => {
 // routes
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
+require('./routes/deal.routes')(app);
 //require('./app/routes/property.routes')(app);
-// set port, listen for requests
-
-const PORT = process.env.PORT || 9090;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
-function initial() {
-  User.create({
-    name: 'Everton Paiva',
-    email: 'evertonpaiva@gmail.com',
-    login: 'evertonpaiva',
-    password: '$2a$08$M6GNBrZ2HnYLnRWBVKnKg.HQX6qNU56fin72vbIgOX6olYj38Vuhu', //abc123-
-    lat: 38.8951,
-    lng: -77.0364,
-    address: 'Rua Direita',
-    city: 'Diamantina',
-    state: 'MG',
-    zip_code: 39100000,
-  });
-}

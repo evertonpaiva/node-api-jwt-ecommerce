@@ -8,13 +8,6 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     timestamps: false,
   },
   operatorsAliases: false,
-
-  pool: {
-    max: config.pool.max,
-    min: config.pool.min,
-    acquire: config.pool.acquire,
-    idle: config.pool.idle,
-  },
 });
 
 const db = {};
@@ -24,7 +17,7 @@ db.sequelize = sequelize;
 db.sequelize = sequelize;
 
 db.user = require('./user.model.js')(sequelize, Sequelize);
-//db.role = require("../models/role.model.js")(sequelize, Sequelize);
+db.deal = require('./deal.model.js')(sequelize, Sequelize);
 //db.property = require("../models/property.model.js")(sequelize, Sequelize);
 
 /*db.role.belongsToMany(db.user, {
