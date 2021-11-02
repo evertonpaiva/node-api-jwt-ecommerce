@@ -38,7 +38,7 @@ exports.initial = async () => {
     address: 'Rua Presidente',
     city: 'Rio de Janeiro',
     state: 'RJ',
-    zip_code: 22300999,
+    zip_code: 23580430,
   })
     .then((newUser) => {
       console.log('User ' + newUser.get().id + ' created.');
@@ -61,6 +61,28 @@ exports.initial = async () => {
     zip_code: 39100000,
     urgency_type: '1 - Baixa',
     photos: ['coolemaster-1.jpg', 'coolemaster-2.jpg'],
+    user_id: firstUser.id,
+  })
+    .then((newDeal) => {
+      console.log('Deal ' + newDeal.get().id + ' created.');
+      return newDeal.get();
+    })
+    .catch((err) => {
+      console.log('Error while deal creation : ', err);
+    });
+
+  let secondDeal = await Deal.create({
+    type: '1 - Venda',
+    value: 99.0,
+    description: 'Headset bluetooh',
+    lat: 68.8572,
+    lng: -10.8573,
+    address: 'Rua dos Navegantes',
+    city: 'Florianópolis',
+    state: 'SC',
+    zip_code: 35182016,
+    urgency_type: '3 - Alta',
+    photos: ['headset-1.jpg', 'headset-2.jpg', 'headset-3.jpg'],
     user_id: firstUser.id,
   })
     .then((newDeal) => {
