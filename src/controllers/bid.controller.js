@@ -49,6 +49,35 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Find bids from a deal
+exports.findByDeal = (req, res) => {
+  const deal_id = req.params.deal_id;
+
+  Bid.findAll({
+    where: {
+      deal_id: deal_id,
+    },
+  })
+    .then((result) => {
+      // array of records
+      let bids = [];
+
+      // formating data to respond
+      result.forEach((b) => {
+        formattedBid = formatBid(b);
+        bids.push({ bid: formattedBid });
+      });
+
+      res.send(bids);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({
+        error: 'Error retrieving Bids with Deal id=' + deal_id,
+      });
+    });
+};
+
 // Update a bid by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

@@ -13,6 +13,9 @@ module.exports = function (app) {
   // get bid by id and deal id
   app.get('/api/v1/deals/:deal_id/bids/:bid_id', [], controller.findOne);
 
+  // get bids from an deal id
+  app.get('/api/v1/deals/:deal_id/bids', [], controller.findByDeal);
+
   // update a bid with id and deal id
   app.put(
     '/api/v1/deals/:deal_id/bids/:bid_id',
