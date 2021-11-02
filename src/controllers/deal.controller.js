@@ -50,3 +50,43 @@ exports.findOne = (req, res) => {
       });
     });
 };
+
+// Update a deal by the id in the request
+exports.update = (req, res) => {
+  const id = req.params.id;
+
+  Deal.findByPk(id)
+    .then((data) => {
+      if (data) {
+        // update the record
+        Deal.update(req.body, {
+          where: { id: id },
+        })
+          .then((user) => {
+            // retrieve updated record from database
+            Deal.findByPk(id).then((updatedDeal) => {
+              formattedDeal = formatDeal(updatedDeal);
+
+              res.send({
+                deal: formattedDeal,
+              });
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).send({
+              error: 'Error updating Deal with id=' + id,
+            });
+          });
+      } else {
+        res.status(404).send({
+          error: 'Deal with id=' + id + ' not found.',
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        error: 'Error retrieving User with id=' + id,
+      });
+    });
+};

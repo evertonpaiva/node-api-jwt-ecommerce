@@ -10,5 +10,9 @@ module.exports = function (app) {
     next();
   });
 
+  // get deal by id
   app.get('/api/v1/deals/:id', [authJwt.verifyToken], controller.findOne);
+
+  // update a deal with id
+  app.put('/api/v1/deals/:id', [authJwt.verifyToken], controller.update);
 };
