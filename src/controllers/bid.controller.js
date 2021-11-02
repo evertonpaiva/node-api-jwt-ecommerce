@@ -19,7 +19,7 @@ exports.findOne = (req, res) => {
   Bid.findByPk(bid_id)
     .then((data) => {
       if (data) {
-        // test if bid belogs to deal
+        // check if provided bid_id belogs to deal_id
         if (data.deal_id != deal_id) {
           res.status(404).send({
             error:
@@ -102,33 +102,45 @@ exports.create = (req, res) => {
     });
 };
 
-// Update a bid by the id in the request
+// Update a bid by the id and a deal id
 exports.update = (req, res) => {
-  const id = req.params.id;
+  const bid_id = req.params.bid_id;
+  const deal_id = req.params.deal_id;
 
-  Bid.findByPk(id)
+  Bid.findByPk(bid_id)
     .then((data) => {
       if (data) {
-        // update the record
-        Bid.update(req.body, {
-          where: { id: id },
-        })
-          .then((bid) => {
-            // retrieve updated record from database
-            Bid.findByPk(id).then((updatedBid) => {
-              formattedBid = formatDeal(updatedBid);
+        // check if provided bid_id belogs to deal_id
+        if (data.deal_id != deal_id) {
+          res.status(404).send({
+            error:
+              'Bid with id=' +
+              bid_id +
+              ' does not belongs to Deal with id=' +
+              deal_id +
+              '.',
+          });
+        } else {
+          // update the record
+          Bid.update(req.body, {
+            where: { id: bid_id },
+          })
+            .then((bid) => {
+              // retrieve updated record from database
+              Bid.findByPk(bid_id).then((updatedBid) => {
+                formattedBid = formatBid(updatedBid);
 
-              res.send({
-                deal: formattedBid,
+                res.send({
+                  deal: formattedBid,
+                });
+              });
+            })
+            .catch((err) => {
+              res.status(500).send({
+                error: 'Error updating Bid with id=' + bid_id,
               });
             });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).send({
-              error: 'Error updating Bid with id=' + id,
-            });
-          });
+        }
       } else {
         res.status(404).send({
           error: 'Bid with id=' + id + ' not found.',
@@ -136,8 +148,9 @@ exports.update = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err);
       res.status(500).send({
-        error: 'Error retrieving Bid with id=' + id,
+        error: 'Error retrieving Bid with id=' + bid_id,
       });
     });
 };
