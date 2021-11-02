@@ -2,6 +2,7 @@ const db = require('../models');
 const User = db.user;
 const Deal = db.deal;
 const Bid = db.bid;
+const Message = db.message;
 
 // Database inicialization
 exports.initial = async () => {
@@ -82,5 +83,19 @@ exports.initial = async () => {
     })
     .catch((err) => {
       console.log('Error while bid creation : ', err);
+    });
+
+  let firstMessage = await Message.create({
+    deal_id: firstDeal.id,
+    user_id: secondUser.id,
+    title: 'Interesse',
+    message:
+      'Tenho interesse no seu produto. Você poderia me enviar mais fotos?',
+  })
+    .then((newMessage) => {
+      console.log('Message ' + newMessage.get().id + ' created.');
+    })
+    .catch((err) => {
+      console.log('Error while message creation : ', err);
     });
 };

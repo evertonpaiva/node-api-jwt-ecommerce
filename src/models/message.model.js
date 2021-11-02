@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Bid = sequelize.define('bids', {
+  const Message = sequelize.define('messages', {
     deal_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -18,27 +18,23 @@ module.exports = (sequelize, Sequelize) => {
         key: 'id',
       },
     },
-    accepted: {
-      type: Sequelize.BOOLEAN,
+    title: {
+      type: Sequelize.STRING,
       allowNull: false,
     },
-    value: {
-      type: Sequelize.DOUBLE,
-      allowNull: false,
-    },
-    description: {
+    message: {
       type: Sequelize.STRING,
       allowNull: false,
     },
   });
 
-  Bid.associate = (models) => {
-    Bid.belongsTo(models.Deal, { foreignKey: 'deal_id', as: 'deal' });
+  Message.associate = (models) => {
+    Message.belongsTo(models.Deal, { foreignKey: 'deal_id', as: 'deal' });
   };
 
-  Bid.associate = (models) => {
-    Bid.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
+  Message.associate = (models) => {
+    Message.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
   };
 
-  return Bid;
+  return Message;
 };
