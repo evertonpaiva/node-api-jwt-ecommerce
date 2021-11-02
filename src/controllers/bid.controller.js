@@ -14,15 +14,28 @@ formatBid = (bid) => {
 // Find a bid by id
 exports.findOne = (req, res) => {
   const bid_id = req.params.bid_id;
+  const deal_id = req.params.deal_id;
 
   Bid.findByPk(bid_id)
     .then((data) => {
       if (data) {
-        formattedBid = formatBid(data);
+        // test if bid belogs to deal
+        if (data.deal_id != deal_id) {
+          res.status(404).send({
+            error:
+              'Bid with id=' +
+              bid_id +
+              ' does not belongs to Deal with id=' +
+              deal_id +
+              '.',
+          });
+        } else {
+          formattedBid = formatBid(data);
 
-        res.send({
-          bid: formattedBid,
-        });
+          res.send({
+            bid: formattedBid,
+          });
+        }
       } else {
         res.status(404).send({
           error: 'Bid with id=' + bid_id + ' not found.',
