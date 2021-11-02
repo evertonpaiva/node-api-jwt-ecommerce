@@ -41,7 +41,7 @@ module.exports = (sequelize, Sequelize) => {
     photos: {
       type: Sequelize.ARRAY(Sequelize.TEXT),
     },
-    userId: {
+    user_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
@@ -53,7 +53,7 @@ module.exports = (sequelize, Sequelize) => {
   });
 
   Deal.associate = (models) => {
-    Deal.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    Deal.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
   };
 
   return Deal;
