@@ -1,5 +1,6 @@
 const db = require('../models');
 const User = db.user;
+const bcrypt = require('bcryptjs');
 
 // Format user data
 formatUser = (user) => {
@@ -42,5 +43,32 @@ exports.findOne = (req, res) => {
       res.status(500).send({
         error: 'Error retrieving User with id=' + id,
       });
+    });
+};
+
+// Create a new user
+exports.create = (req, res) => {
+  // Save User to Database
+  User.create({
+    name: req.body.name,
+    login: req.body.login,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8),
+    lat: req.body.lat,
+    lng: req.body.lng,
+    address: req.body.address,
+    city: req.body.city,
+    state: req.body.state,
+    zip_code: req.body.zip_code,
+  })
+    .then((user) => {
+      formattedUser = formatUser(user);
+
+      res.send({
+        user: formattedUser,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
     });
 };

@@ -7,21 +7,6 @@ const Op = db.Sequelize.Op;
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 
-exports.signup = (req, res) => {
-  // Save User to Database
-  User.create({
-    login: req.body.login,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-  })
-    .then((user) => {
-      res.send({ message: 'User registered successfully!' });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
-};
-
 exports.signin = (req, res) => {
   User.findOne({
     where: {

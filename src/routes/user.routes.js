@@ -10,5 +10,9 @@ module.exports = function (app) {
     next();
   });
 
+  // get user by id
   app.get('/api/v1/users/:id', [authJwt.verifyToken], controller.findOne);
+
+  // create user
+  app.post('/api/v1/users', [authJwt.verifyToken], controller.create);
 };
