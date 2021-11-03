@@ -30,6 +30,24 @@ Estimativa em horas de desenvolvimento (disponibilidade de 20h/semana):
 
 ### Starting the appication
 
+Go to the root directory project:
+
 ```bash
 docker-compose up -d
 ```
+
+The services will be avaliable on:
+
+- Database
+
+  - Host: `localhost`
+  - Port: `5440`
+  - Database: `ecommerce`
+  - User: `ecommerce-user`
+  - Password: `RAnoP5244X9Aen5w8U6CKQ`
+  - Database data: `~/postgres/ecommerce`
+
+- Web server
+  - URL: [localhost:9090](http://localhost:9090/)
+  - user: `evertonpaiva`
+  - password: `abc123-`
