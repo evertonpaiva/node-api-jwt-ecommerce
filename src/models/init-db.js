@@ -4,6 +4,7 @@ const Deal = db.deal;
 const Bid = db.bid;
 const Message = db.message;
 const Invite = db.invite;
+const Token = db.token;
 
 // Database inicialization
 exports.initial = async () => {
@@ -140,10 +141,34 @@ exports.initial = async () => {
     user: thirdUser.id,
     user_invited: firstUser.id,
   })
-    .then((newMessage) => {
-      console.log('Invite ' + newMessage.get().id + ' created.');
+    .then((newInvite) => {
+      console.log('Invite ' + newInvite.get().id + ' created.');
     })
     .catch((err) => {
       console.log('Error while invite creation : ', err);
+    });
+
+  let firstToken = await Token.create({
+    user_id: firstUser.id,
+    token: 'f0e21030-1edc-013a-e198-0aa5d4c8e409199476',
+    active: true,
+  })
+    .then((newToken) => {
+      console.log('Token ' + newToken.get().id + ' created.');
+    })
+    .catch((err) => {
+      console.log('Error while token creation : ', err);
+    });
+
+  let secondToken = await Token.create({
+    user_id: firstUser.id,
+    token: '6cde4432-7af8-4d8f-a03f-b40dc3e04e7a2453f36',
+    active: false,
+  })
+    .then((newToken) => {
+      console.log('Token ' + newToken.get().id + ' created.');
+    })
+    .catch((err) => {
+      console.log('Error while token creation : ', err);
     });
 };
