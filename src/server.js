@@ -42,6 +42,7 @@ require('./routes/deal.routes')(app);
 require('./routes/bid.routes')(app);
 require('./routes/message.routes')(app);
 require('./routes/delivery.routes')(app);
+require('./routes/invite.routes')(app);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

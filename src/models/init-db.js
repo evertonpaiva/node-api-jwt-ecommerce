@@ -3,6 +3,7 @@ const User = db.user;
 const Deal = db.deal;
 const Bid = db.bid;
 const Message = db.message;
+const Invite = db.invite;
 
 // Database inicialization
 exports.initial = async () => {
@@ -39,6 +40,18 @@ exports.initial = async () => {
     city: 'Rio de Janeiro',
     state: 'RJ',
     zip_code: 23580430,
+  })
+    .then((newUser) => {
+      console.log('User ' + newUser.get().id + ' created.');
+      return newUser.get();
+    })
+    .catch((err) => {
+      console.log('Error while user creation : ', err);
+    });
+
+  let thirdUser = await User.create({
+    name: 'Monteiro Lobato',
+    email: 'monteirolobato@email.com',
   })
     .then((newUser) => {
       console.log('User ' + newUser.get().id + ' created.');
@@ -119,5 +132,18 @@ exports.initial = async () => {
     })
     .catch((err) => {
       console.log('Error while message creation : ', err);
+    });
+
+  let firstInvite = await Invite.create({
+    name: thirdUser.name,
+    email: thirdUser.email,
+    user: thirdUser.id,
+    user_invited: firstUser.id,
+  })
+    .then((newMessage) => {
+      console.log('Invite ' + newMessage.get().id + ' created.');
+    })
+    .catch((err) => {
+      console.log('Error while invite creation : ', err);
     });
 };
