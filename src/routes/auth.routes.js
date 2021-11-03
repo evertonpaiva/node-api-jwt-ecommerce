@@ -10,5 +10,9 @@ module.exports = function (app) {
     next();
   });
 
+  // user and pass sigin
   app.post('/api/v1/authenticate', controller.signin);
+
+  // user and sso siging
+  app.post('/api/v1/authenticate/sso', controller.ssoSignin);
 };
