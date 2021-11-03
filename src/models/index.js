@@ -20,5 +20,6 @@ db.user = require('./user.model.js')(sequelize, Sequelize);
 db.deal = require('./deal.model.js')(sequelize, Sequelize);
 db.bid = require('./bid.model.js')(sequelize, Sequelize);
 db.message = require('./message.model.js')(sequelize, Sequelize);
+db.delivery = require('./delivery.model.js')(sequelize, Sequelize);
 
 module.exports = db;

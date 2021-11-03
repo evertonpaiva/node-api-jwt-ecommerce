@@ -63,7 +63,7 @@ exports.findByDeal = (req, res) => {
 
       // formating data to respond
       result.forEach((b) => {
-        formattedMessage = formatMessage(b);
+        let formattedMessage = formatMessage(b);
         messages.push({ message: formattedMessage });
       });
 

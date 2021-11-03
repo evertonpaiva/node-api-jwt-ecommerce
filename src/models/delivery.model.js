@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Delivery = sequelize.define('messages', {
+  const Delivery = sequelize.define('deliveries', {
     deal_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -31,7 +31,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     days: {
-      type: Sequelize.INT,
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     notes: {
