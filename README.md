@@ -51,3 +51,4 @@ The services will be avaliable on:
   - URL: [localhost:9090](http://localhost:9090/)
   - user: `evertonpaiva`
   - password: `abc123-`
+  - app_token: `f0e21030-1edc-013a-e198-0aa5d4c8e409199476`
