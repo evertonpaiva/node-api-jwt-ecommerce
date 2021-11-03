@@ -4,6 +4,7 @@ services:
     build:
       context: ./
     container_name: ecommerce-web
+    restart: always
     volumes:
       - .:/usr/src/app
     command: npm run start:dev
