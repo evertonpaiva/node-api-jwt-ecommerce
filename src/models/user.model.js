@@ -10,35 +10,35 @@ module.exports = (sequelize, Sequelize) => {
     },
     login: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     password: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     lat: {
       type: Sequelize.DOUBLE,
-      allowNull: false,
+      allowNull: true,
     },
     lng: {
       type: Sequelize.DOUBLE,
-      allowNull: false,
+      allowNull: true,
     },
     address: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     city: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     state: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     zip_code: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   });
   return User;
