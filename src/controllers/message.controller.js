@@ -37,7 +37,7 @@ exports.findOne = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Message with id=${messageId}`,
       });
@@ -65,7 +65,7 @@ exports.findByDeal = (req, res) => {
 
       res.send(messages);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Messages with Deal id=${dealId}`,
       });
@@ -113,7 +113,7 @@ exports.update = (req, res) => {
           Message.update(req.body, {
             where: { id: messageId },
           })
-            .then((message) => {
+            .then(() => {
               // retrieve updated record from database
               Message.findByPk(messageId).then((updatedMessage) => {
                 const formattedMessage = formatMessage(updatedMessage);
@@ -123,7 +123,7 @@ exports.update = (req, res) => {
                 });
               });
             })
-            .catch((err) => {
+            .catch(() => {
               res.status(500).send({
                 error: `Error updating Message with id=${messageId}`,
               });
@@ -135,7 +135,7 @@ exports.update = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Message with id=${messageId}`,
       });

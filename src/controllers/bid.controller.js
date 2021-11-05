@@ -38,7 +38,7 @@ const findOne = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Bid with id=${bidId}`,
       });
@@ -66,7 +66,7 @@ const findByDeal = (req, res) => {
 
       res.send(bids);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Bids with Deal id=${dealId}`,
       });
@@ -115,7 +115,7 @@ const update = (req, res) => {
           Bid.update(req.body, {
             where: { id: bidId },
           })
-            .then((bid) => {
+            .then(() => {
               // retrieve updated record from database
               Bid.findByPk(bidId).then((updatedBid) => {
                 const formattedBid = formatBid(updatedBid);
@@ -125,7 +125,7 @@ const update = (req, res) => {
                 });
               });
             })
-            .catch((err) => {
+            .catch(() => {
               res.status(500).send({
                 error: `Error updating Bid with id=${bidId}`,
               });
@@ -137,7 +137,7 @@ const update = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Bid with id=${bidId}`,
       });

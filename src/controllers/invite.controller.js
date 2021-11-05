@@ -34,7 +34,7 @@ exports.findByUser = (req, res) => {
 
       res.send(invites);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Invites with Deal id=${userInvited}`,
       });
@@ -61,11 +61,11 @@ exports.create = (req, res) => {
           const formattedInvite = formatInvite(invite);
           res.send(formattedInvite);
         })
-        .catch((err) => {
+        .catch(() => {
           res.status(500).send({ error: 'Failed to create invite' });
         });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ error: 'Failed to create user invited' });
     });
 };

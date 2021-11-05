@@ -40,7 +40,7 @@ exports.findOne = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving User with id=${id}`,
       });
@@ -85,7 +85,7 @@ exports.update = (req, res) => {
         User.update(req.body, {
           where: { id },
         })
-          .then((user) => {
+          .then(() => {
             // retrieve updated record from database
             User.findByPk(id).then((updatedUser) => {
               const formattedUser = formatUser(updatedUser);
@@ -95,7 +95,7 @@ exports.update = (req, res) => {
               });
             });
           })
-          .catch((err) => {
+          .catch(() => {
             res.status(500).send({
               error: `Error updating User with id=${id}`,
             });
@@ -106,7 +106,7 @@ exports.update = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving User with id=${id}`,
       });

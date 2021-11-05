@@ -28,7 +28,7 @@ const shippingCost = async (dealId, userId) => {
 
       return deal.get().zip_code.toString();
     })
-    .catch((err) => {
+    .catch(() => {
       throw new Error(`Error retrieving information Deal id=${dealId}`);
     });
 

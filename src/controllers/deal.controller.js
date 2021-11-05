@@ -43,7 +43,7 @@ const findOne = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving Deal with id=${id}`,
       });
@@ -92,7 +92,7 @@ const update = (req, res) => {
         Deal.update(req.body, {
           where: { id },
         })
-          .then((user) => {
+          .then(() => {
             // retrieve updated record from database
             Deal.findByPk(id).then((updatedDeal) => {
               const formattedDeal = formatDeal(updatedDeal);
@@ -102,7 +102,7 @@ const update = (req, res) => {
               });
             });
           })
-          .catch((err) => {
+          .catch(() => {
             res.status(500).send({
               error: `Error updating Deal with id=${id}`,
             });
@@ -113,7 +113,7 @@ const update = (req, res) => {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         error: `Error retrieving User with id=${id}`,
       });
