@@ -4,13 +4,14 @@ const db = require('../models');
 const User = db.user;
 
 verifyToken = (req, res, next) => {
+  let token = null;
   // default header
   let tokenBearer = req.headers['authorization'];
   if (tokenBearer) {
     token = tokenBearer.replace('Bearer ', '');
   } else {
     // try to get token from x-acess-token
-    let token = req.headers['x-access-token'];
+    token = req.headers['x-access-token'];
   }
 
   if (!token) {
