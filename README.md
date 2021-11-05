@@ -52,3 +52,42 @@ The services will be avaliable on:
   - user: `evertonpaiva`
   - password: `abc123-`
   - app_token: `f0e21030-1edc-013a-e198-0aa5d4c8e409199476`
+
+### Environments
+
+Variables description:
+
+- NODE_HOST: host address of the server
+- NODE_PORT: host port of the server
+- API_USER: initial user
+- API_PASS: initial password
+- API_VERSION: current api version
+- API_APP_TOKEN: initial app token
+- DATABASE_FORCE_DROP: force drop and recreate to database objects
+- DATABASE_POPULATE_DATA: insert initial data to database
+- DATABASE_SHOWLOGS: show sql logs to webserver log output
+
+Environment variable files:
+
+- Development: `.env`
+- Test: `.env.test`
+
+## Tests
+
+Runnings tests instructions:
+
+```bash
+# log in to webserver container
+docker exec -it ecommerce-web bash
+
+# running tests
+npm run test
+
+# running tests with code coverage report
+npm run test:coverage
+
+# exiting the container
+exit
+```
+
+The coverage report will be avaliable ate do `coverage` directory, root dir at this project. Open `index.html` with a browser to visualize.
