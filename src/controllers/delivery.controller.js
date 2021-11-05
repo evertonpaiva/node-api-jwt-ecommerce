@@ -3,6 +3,7 @@ const Delivery = db.delivery;
 const Deal = db.deal;
 const User = db.user;
 const { calcularPrecoPrazo } = require('correios-brasil');
+const { delivery } = require('../models');
 
 // Format message data
 formatDelivery = (delivery) => {
@@ -21,22 +22,26 @@ shippingCost = async (deal_id, user_id) => {
   // get zip code from seller
   let fromCode = await Deal.findByPk(deal_id)
     .then((deal) => {
+      if (!deal) {
+        throw new Error('Error retrieving information from Deal id=' + deal_id);
+      }
+
       return deal.get().zip_code.toString();
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).send({
-        error: 'Error retrieving information Deal id=' + deal_id,
-      });
+      throw new Error('Error retrieving information Deal id=' + deal_id);
     });
 
   // get zip code from buyer
   let toCode = await User.findByPk(user_id)
     .then((user) => {
+      if (!user) {
+        throw new Error('Error retrieving information from User id=' + user_id);
+      }
       return user.get().zip_code.toString();
     })
     .catch((err) => {
-      console.log(err);
+      throw new Error(err);
     });
 
   let args = {
@@ -87,10 +92,8 @@ exports.findShippingCost = async (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).send({
-        error:
-          'Error calculating shipping cost. From=' + cep_from + ' To=' + cep_to,
+        error: 'Error calculating shipping cost. ' + err,
       });
     });
 };
@@ -100,7 +103,13 @@ exports.create = async (req, res) => {
   const deal_id = req.params.deal_id;
   const user_id = req.body.user_id;
 
-  let delivery = await shippingCost(deal_id, user_id);
+  if (!user_id) {
+    res.status(500).send({ error: 'User id is not provided.' });
+  }
+
+  let delivery = await shippingCost(deal_id, user_id).catch((err) => {
+    res.status(500).send({ error: err.message });
+  });
 
   // Save Delivery to Database
   Delivery.create({
