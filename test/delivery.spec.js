@@ -1,6 +1,7 @@
 const request = require('request');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const { API_URL, API_ROOT, API_USER } = require('./config');
 
 describe('Delivery test', () => {
@@ -57,7 +58,7 @@ describe('Delivery test', () => {
   describe('Create delivery', () => {
     describe('/api/v{n}/deals/{ID}/deliveries POST', () => {
       it('Success request', (done) => {
-        let url = `${API_URL}${API_ROOT}/deals/1/deliveries`;
+        const url = `${API_URL}${API_ROOT}/deals/1/deliveries`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/deliveries`,
@@ -81,7 +82,7 @@ describe('Delivery test', () => {
         );
       });
       it('Fail request', (done) => {
-        let url = `${API_URL}${API_ROOT}/deliveries`;
+        const url = `${API_URL}${API_ROOT}/deliveries`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/deliveries`,

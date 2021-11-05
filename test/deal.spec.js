@@ -1,6 +1,7 @@
 const request = require('request');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const { API_URL, API_ROOT, API_USER } = require('./config');
 
 describe('Deal test', () => {
@@ -56,7 +57,7 @@ describe('Deal test', () => {
   describe('Create deal', () => {
     describe('/api/v{n}/deals POST', () => {
       it('Success request', (done) => {
-        let url = `${API_URL}${API_ROOT}/deals`;
+        const url = `${API_URL}${API_ROOT}/deals`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals`,
@@ -91,7 +92,7 @@ describe('Deal test', () => {
         );
       });
       it('Fail request', (done) => {
-        let url = `${API_URL}${API_ROOT}/deals`;
+        const url = `${API_URL}${API_ROOT}/deals`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals`,
@@ -129,7 +130,7 @@ describe('Deal test', () => {
   describe('Update deal', () => {
     describe('/api/v{n}/deals/{ID} PUT', () => {
       it('Success request', (done) => {
-        let newDescription = 'Mouse USB de alta resolução';
+        const newDescription = 'Mouse USB de alta resolução';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/deals/1`,
@@ -154,7 +155,7 @@ describe('Deal test', () => {
         );
       });
       it('Fail request', (done) => {
-        let newDescription = 'Mouse USB de alta resolução';
+        const newDescription = 'Mouse USB de alta resolução';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/deals/99`,

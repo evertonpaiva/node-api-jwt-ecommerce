@@ -14,6 +14,7 @@ const DATABASE_SHOWLOGS = process.env.DATABASE_SHOWLOGS === 'true';
 const showLogs = DATABASE_SHOWLOGS ? console.log : false;
 
 const Sequelize = require('sequelize');
+
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
   dialect: config.dialect,

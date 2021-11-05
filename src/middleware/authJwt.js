@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/auth.config.js');
 const db = require('../models');
+
 const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = null;
   // default header
-  let tokenBearer = req.headers['authorization'];
+  const tokenBearer = req.headers.authorization;
   if (tokenBearer) {
     token = tokenBearer.replace('Bearer ', '');
   } else {
@@ -32,6 +33,6 @@ verifyToken = (req, res, next) => {
 };
 
 const authJwt = {
-  verifyToken: verifyToken,
+  verifyToken,
 };
 module.exports = authJwt;

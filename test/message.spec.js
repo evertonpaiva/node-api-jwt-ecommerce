@@ -1,6 +1,7 @@
 const request = require('request');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const { API_URL, API_ROOT, API_USER } = require('./config');
 
 describe('Message test', () => {
@@ -96,7 +97,7 @@ describe('Message test', () => {
   describe('Create message', () => {
     describe('/api/v{n}/deals/{ID}/messages POST', () => {
       it('Success request', (done) => {
-        let url = `${API_URL}${API_ROOT}/deals/1/messages`;
+        const url = `${API_URL}${API_ROOT}/deals/1/messages`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages`,
@@ -123,7 +124,7 @@ describe('Message test', () => {
         );
       });
       it('Fail request', (done) => {
-        let url = `${API_URL}${API_ROOT}/messages`;
+        const url = `${API_URL}${API_ROOT}/messages`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages`,
@@ -153,7 +154,7 @@ describe('Message test', () => {
   describe('Update message', () => {
     describe('/api/v{n}/deals/1/messages/{ID} PUT', () => {
       it('Success request', (done) => {
-        let newMessage = 'O produto ainda está disponível?';
+        const newMessage = 'O produto ainda está disponível?';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages/1`,
@@ -179,7 +180,7 @@ describe('Message test', () => {
         );
       });
       it('Fail request', (done) => {
-        let newDescription = 'Pagamento via cheque';
+        const newDescription = 'Pagamento via cheque';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages/99`,

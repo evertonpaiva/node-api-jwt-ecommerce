@@ -1,4 +1,5 @@
 const db = require('../models');
+
 const Delivery = db.delivery;
 const Deal = db.deal;
 const User = db.user;
@@ -20,23 +21,23 @@ formatDelivery = (delivery) => {
 
 shippingCost = async (deal_id, user_id) => {
   // get zip code from seller
-  let fromCode = await Deal.findByPk(deal_id)
+  const fromCode = await Deal.findByPk(deal_id)
     .then((deal) => {
       if (!deal) {
-        throw new Error('Error retrieving information from Deal id=' + deal_id);
+        throw new Error(`Error retrieving information from Deal id=${deal_id}`);
       }
 
       return deal.get().zip_code.toString();
     })
     .catch((err) => {
-      throw new Error('Error retrieving information Deal id=' + deal_id);
+      throw new Error(`Error retrieving information Deal id=${deal_id}`);
     });
 
   // get zip code from buyer
-  let toCode = await User.findByPk(user_id)
+  const toCode = await User.findByPk(user_id)
     .then((user) => {
       if (!user) {
-        throw new Error('Error retrieving information from User id=' + user_id);
+        throw new Error(`Error retrieving information from User id=${user_id}`);
       }
       return user.get().zip_code.toString();
     })
@@ -44,7 +45,7 @@ shippingCost = async (deal_id, user_id) => {
       throw new Error(err);
     });
 
-  let args = {
+  const args = {
     sCepOrigem: fromCode,
     sCepDestino: toCode,
     // default values - @to-do: update values from each product
@@ -60,14 +61,14 @@ shippingCost = async (deal_id, user_id) => {
   // getting shipping cost from Correios
   return calcularPrecoPrazo(args)
     .then((response) => {
-      let notes = response[0]['obsFim'] ? response[0]['obsFim'] : '';
+      const notes = response[0].obsFim ? response[0].obsFim : '';
 
-      let delivery = {
-        cost: response[0]['Valor'].replace(',', '.'),
-        days: response[0]['PrazoEntrega'],
-        notes: notes,
-        deal_id: deal_id,
-        user_id: user_id,
+      const delivery = {
+        cost: response[0].Valor.replace(',', '.'),
+        days: response[0].PrazoEntrega,
+        notes,
+        deal_id,
+        user_id,
         cep_from: fromCode,
         cep_to: toCode,
       };
@@ -81,33 +82,33 @@ shippingCost = async (deal_id, user_id) => {
 
 // Find shipping cost from a deal
 exports.findShippingCost = async (req, res) => {
-  const deal_id = req.params.deal_id;
+  const { deal_id } = req.params;
   const user_id = req.userId;
 
   shippingCost(deal_id, user_id)
     .then((delivery) => {
       res.send({
-        delivery: delivery,
+        delivery,
         steps: [],
       });
     })
     .catch((err) => {
       res.status(500).send({
-        error: 'Error calculating shipping cost. ' + err,
+        error: `Error calculating shipping cost. ${err}`,
       });
     });
 };
 
 // Create a new message
 exports.create = async (req, res) => {
-  const deal_id = req.params.deal_id;
-  const user_id = req.body.user_id;
+  const { deal_id } = req.params;
+  const { user_id } = req.body;
 
   if (!user_id) {
     res.status(500).send({ error: 'User id is not provided.' });
   }
 
-  let delivery = await shippingCost(deal_id, user_id).catch((err) => {
+  const delivery = await shippingCost(deal_id, user_id).catch((err) => {
     res.status(500).send({ error: err.message });
   });
 
@@ -122,7 +123,7 @@ exports.create = async (req, res) => {
     notes: delivery.notes,
   })
     .then((delivery) => {
-      let formattedDelivery = formatDelivery(delivery);
+      const formattedDelivery = formatDelivery(delivery);
       res.send({
         delivery: formattedDelivery,
       });

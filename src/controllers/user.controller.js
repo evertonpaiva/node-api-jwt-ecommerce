@@ -1,4 +1,5 @@
 const db = require('../models');
+
 const User = db.user;
 const bcrypt = require('bcryptjs');
 
@@ -23,7 +24,7 @@ formatUser = (user) => {
 
 // Find a user by id
 exports.findOne = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   User.findByPk(id)
     .then((data) => {
@@ -35,13 +36,13 @@ exports.findOne = (req, res) => {
         });
       } else {
         res.status(404).send({
-          error: 'User with id=' + id + ' not found.',
+          error: `User with id=${id} not found.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        error: 'Error retrieving User with id=' + id,
+        error: `Error retrieving User with id=${id}`,
       });
     });
 };
@@ -75,14 +76,14 @@ exports.create = (req, res) => {
 
 // Update a user by the id in the request
 exports.update = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   User.findByPk(id)
     .then((data) => {
       if (data) {
         // update the record
         User.update(req.body, {
-          where: { id: id },
+          where: { id },
         })
           .then((user) => {
             // retrieve updated record from database
@@ -97,18 +98,18 @@ exports.update = (req, res) => {
           .catch((err) => {
             console.log(err);
             res.status(500).send({
-              error: 'Error updating User with id=' + id,
+              error: `Error updating User with id=${id}`,
             });
           });
       } else {
         res.status(404).send({
-          error: 'User with id=' + id + ' not found.',
+          error: `User with id=${id} not found.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        error: 'Error retrieving User with id=' + id,
+        error: `Error retrieving User with id=${id}`,
       });
     });
 };

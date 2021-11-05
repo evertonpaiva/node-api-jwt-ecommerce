@@ -1,6 +1,7 @@
 const request = require('request');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const { API_URL, API_ROOT, API_USER } = require('./config');
 
 describe('User test', () => {
@@ -56,7 +57,7 @@ describe('User test', () => {
   describe('Create user', () => {
     describe('/api/v{n}/users POST', () => {
       it('Success request', (done) => {
-        let url = `${API_URL}${API_ROOT}/users`;
+        const url = `${API_URL}${API_ROOT}/users`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users`,
@@ -90,7 +91,7 @@ describe('User test', () => {
         );
       });
       it('Fail request', (done) => {
-        let url = `${API_URL}${API_ROOT}/users`;
+        const url = `${API_URL}${API_ROOT}/users`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users`,
@@ -128,7 +129,7 @@ describe('User test', () => {
   describe('Update user', () => {
     describe('/api/v{n}/users/{ID} PUT', () => {
       it('Success request', (done) => {
-        let newName = 'Oscar Niemeyer';
+        const newName = 'Oscar Niemeyer';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/users/1`,
@@ -153,7 +154,7 @@ describe('User test', () => {
         );
       });
       it('Fail request', (done) => {
-        let newName = 'Oscar Niemeyer';
+        const newName = 'Oscar Niemeyer';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/users/99`,

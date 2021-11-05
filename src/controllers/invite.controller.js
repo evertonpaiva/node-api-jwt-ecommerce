@@ -1,4 +1,5 @@
 const db = require('../models');
+
 const Invite = db.invite;
 const User = db.user;
 
@@ -18,16 +19,16 @@ exports.findByUser = (req, res) => {
 
   Invite.findAll({
     where: {
-      user_invited: user_invited,
+      user_invited,
     },
   })
     .then((result) => {
       // array of records
-      let invites = [];
+      const invites = [];
 
       // formating data to respond
       result.forEach((b) => {
-        let formattedInvite = formatInvite(b);
+        const formattedInvite = formatInvite(b);
         invites.push({ invite: formattedInvite });
       });
 
@@ -36,14 +37,14 @@ exports.findByUser = (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(500).send({
-        error: 'Error retrieving Invites with Deal id=' + user_id,
+        error: `Error retrieving Invites with Deal id=${user_id}`,
       });
     });
 };
 
 // Create a new invite
 exports.create = (req, res) => {
-  const user_id = req.params.user_id;
+  const { user_id } = req.params;
 
   // Create invited user
   User.create({
@@ -51,7 +52,7 @@ exports.create = (req, res) => {
     email: req.body.email,
   })
     .then((user) => {
-      let invitedUser = user.get();
+      const invitedUser = user.get();
       // Create invite
       Invite.create({
         name: invitedUser.name,

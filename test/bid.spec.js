@@ -1,6 +1,7 @@
 const request = require('request');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const { API_URL, API_ROOT, API_USER } = require('./config');
 
 describe('Bid test', () => {
@@ -94,7 +95,7 @@ describe('Bid test', () => {
   describe('Create bid', () => {
     describe('/api/v{n}/deals/{ID}/bids POST', () => {
       it('Success request', (done) => {
-        let url = `${API_URL}${API_ROOT}/deals/1/bids`;
+        const url = `${API_URL}${API_ROOT}/deals/1/bids`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids`,
@@ -122,7 +123,7 @@ describe('Bid test', () => {
         );
       });
       it('Fail request', (done) => {
-        let url = `${API_URL}${API_ROOT}/bids`;
+        const url = `${API_URL}${API_ROOT}/bids`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids`,
@@ -152,7 +153,7 @@ describe('Bid test', () => {
   describe('Update bid', () => {
     describe('/api/v{n}/deals/1/bids/{ID} PUT', () => {
       it('Success request', (done) => {
-        let newDescription = 'Pagamento via cheque';
+        const newDescription = 'Pagamento via cheque';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids/1`,
@@ -178,7 +179,7 @@ describe('Bid test', () => {
         );
       });
       it('Fail request', (done) => {
-        let newDescription = 'Pagamento via cheque';
+        const newDescription = 'Pagamento via cheque';
         request.put(
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids/99`,

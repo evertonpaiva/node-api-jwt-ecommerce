@@ -1,6 +1,7 @@
 const request = require('request');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const { API_URL, API_ROOT, API_USER } = require('./config');
 
 describe('Invite test', () => {
@@ -58,7 +59,7 @@ describe('Invite test', () => {
   describe('Create invite', () => {
     describe('/api/v{n}/users/{ID}/invites POST', () => {
       it('Success request', (done) => {
-        let url = `${API_URL}${API_ROOT}/users/1/invites`;
+        const url = `${API_URL}${API_ROOT}/users/1/invites`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users/1/invites`,
@@ -84,7 +85,7 @@ describe('Invite test', () => {
         );
       });
       it('Fail request', (done) => {
-        let url = `${API_URL}${API_ROOT}/invites`;
+        const url = `${API_URL}${API_ROOT}/invites`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users/1/invites`,

@@ -12,12 +12,13 @@ const populateData = process.env.DATABASE_POPULATE_DATA === 'true';
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
 const app = express();
 
 // database
 const { databaseInit } = require('./models/init.db');
 
-var corsOptions = {
+const corsOptions = {
   origin: `http://${NODE_HOST}:${NODE_PORT}`,
 };
 

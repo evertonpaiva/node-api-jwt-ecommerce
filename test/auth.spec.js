@@ -1,7 +1,8 @@
-//const should = require("should");
+// const should = require("should");
 const request = require('request');
 const chai = require('chai');
-const expect = chai.expect;
+
+const { expect } = chai;
 const {
   API_URL,
   API_ROOT,
@@ -15,7 +16,7 @@ describe('Server test', () => {
     it('Should return status code 200', (done) => {
       request.get(
         {
-          url: API_URL + '/',
+          url: `${API_URL}/`,
         },
         (error, response, body) => {
           // status code expected

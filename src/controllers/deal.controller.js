@@ -1,4 +1,5 @@
 const db = require('../models');
+
 const Deal = db.deal;
 
 // Format deal data
@@ -26,7 +27,7 @@ formatDeal = (deal) => {
 
 // Find a deal by id
 exports.findOne = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   Deal.findByPk(id)
     .then((data) => {
@@ -38,13 +39,13 @@ exports.findOne = (req, res) => {
         });
       } else {
         res.status(404).send({
-          error: 'Deal with id=' + id + ' not found.',
+          error: `Deal with id=${id} not found.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        error: 'Error retrieving Deal with id=' + id,
+        error: `Error retrieving Deal with id=${id}`,
       });
     });
 };
@@ -82,14 +83,14 @@ exports.create = (req, res) => {
 
 // Update a deal by the id in the request
 exports.update = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   Deal.findByPk(id)
     .then((data) => {
       if (data) {
         // update the record
         Deal.update(req.body, {
-          where: { id: id },
+          where: { id },
         })
           .then((user) => {
             // retrieve updated record from database
@@ -104,18 +105,18 @@ exports.update = (req, res) => {
           .catch((err) => {
             console.log(err);
             res.status(500).send({
-              error: 'Error updating Deal with id=' + id,
+              error: `Error updating Deal with id=${id}`,
             });
           });
       } else {
         res.status(404).send({
-          error: 'Deal with id=' + id + ' not found.',
+          error: `Deal with id=${id} not found.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        error: 'Error retrieving User with id=' + id,
+        error: `Error retrieving User with id=${id}`,
       });
     });
 };
