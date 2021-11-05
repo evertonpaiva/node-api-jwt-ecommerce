@@ -1,1 +1,9 @@
+# code coverage report files
+coverage/*
+!coverage/.gitkeep
+
+# node modules dir
 node_modules/
+
+# output dir nyc files
+.nyc_output/
