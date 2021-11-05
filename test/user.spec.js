@@ -120,6 +120,70 @@ describe('User test', () => {
           }
         );
       });
+      it('Fail request - duplicate email', (done) => {
+        request.post(
+          {
+            url: `${API_URL}${API_ROOT}/users`,
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+            form: {
+              name: 'Carlos Alberto',
+              email: 'carlosalberto@email.com',
+              login: 'carlos',
+              password: 'zxcvb123-',
+              lat: 67.7524,
+              lng: -36.5637,
+              address: 'Rua dos Inconfidentes',
+              city: 'São Paulo',
+              state: 'SP',
+              zip_code: '01034903',
+            },
+          },
+          (err, response, body) => {
+            const { error } = JSON.parse(response.body);
+            // status code expected
+            expect(response.statusCode).to.equal(400);
+
+            // data expected
+            expect(error).to.not.be.null;
+
+            done();
+          }
+        );
+      });
+      it('Fail request - duplicate user', (done) => {
+        request.post(
+          {
+            url: `${API_URL}${API_ROOT}/users`,
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+            form: {
+              name: 'Carlos Alberto',
+              email: 'carlosa@email.com',
+              login: 'carlosalberto',
+              password: 'zxcvb123-',
+              lat: 67.7524,
+              lng: -36.5637,
+              address: 'Rua dos Inconfidentes',
+              city: 'São Paulo',
+              state: 'SP',
+              zip_code: '01034903',
+            },
+          },
+          (err, response, body) => {
+            const { error } = JSON.parse(response.body);
+            // status code expected
+            expect(response.statusCode).to.equal(400);
+
+            // data expected
+            expect(error).to.not.be.null;
+
+            done();
+          }
+        );
+      });
     });
   });
 
