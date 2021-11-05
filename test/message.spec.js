@@ -2,7 +2,7 @@ const request = require('request');
 const chai = require('chai');
 
 const { expect } = chai;
-const { API_URL, API_ROOT, API_USER } = require('./config');
+const { API_URL, API_ROOT } = require('./config');
 
 describe('Message test', () => {
   // List
@@ -97,12 +97,11 @@ describe('Message test', () => {
   describe('Create message', () => {
     describe('/api/v{n}/deals/{ID}/messages POST', () => {
       it('Success request', (done) => {
-        const url = `${API_URL}${API_ROOT}/deals/1/messages`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               user_id: 2,
@@ -124,12 +123,11 @@ describe('Message test', () => {
         );
       });
       it('Fail request', (done) => {
-        const url = `${API_URL}${API_ROOT}/messages`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               accepted: 0,
@@ -159,7 +157,7 @@ describe('Message test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages/1`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               message: newMessage,
@@ -185,7 +183,7 @@ describe('Message test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/1/messages/99`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               description: newDescription,

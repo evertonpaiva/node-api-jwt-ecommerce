@@ -13,7 +13,7 @@ describe('User test', () => {
           {
             url: `${API_URL}${API_ROOT}/users/1`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -34,7 +34,7 @@ describe('User test', () => {
           {
             url: `${API_URL}${API_ROOT}/users/99`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -57,12 +57,11 @@ describe('User test', () => {
   describe('Create user', () => {
     describe('/api/v{n}/users POST', () => {
       it('Success request', (done) => {
-        const url = `${API_URL}${API_ROOT}/users`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               name: 'Carlos Alberto',
@@ -91,12 +90,11 @@ describe('User test', () => {
         );
       });
       it('Fail request', (done) => {
-        const url = `${API_URL}${API_ROOT}/users`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               email: 'tiradentes@email.com',
@@ -134,7 +132,7 @@ describe('User test', () => {
           {
             url: `${API_URL}${API_ROOT}/users/1`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               name: newName,
@@ -159,7 +157,7 @@ describe('User test', () => {
           {
             url: `${API_URL}${API_ROOT}/users/99`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               name: newName,

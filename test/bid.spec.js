@@ -2,7 +2,7 @@ const request = require('request');
 const chai = require('chai');
 
 const { expect } = chai;
-const { API_URL, API_ROOT, API_USER } = require('./config');
+const { API_URL, API_ROOT } = require('./config');
 
 describe('Bid test', () => {
   // List
@@ -95,12 +95,11 @@ describe('Bid test', () => {
   describe('Create bid', () => {
     describe('/api/v{n}/deals/{ID}/bids POST', () => {
       it('Success request', (done) => {
-        const url = `${API_URL}${API_ROOT}/deals/1/bids`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               accepted: 0,
@@ -123,12 +122,11 @@ describe('Bid test', () => {
         );
       });
       it('Fail request', (done) => {
-        const url = `${API_URL}${API_ROOT}/bids`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               accepted: 0,
@@ -158,7 +156,7 @@ describe('Bid test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids/1`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               description: newDescription,
@@ -184,7 +182,7 @@ describe('Bid test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/1/bids/99`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               description: newDescription,

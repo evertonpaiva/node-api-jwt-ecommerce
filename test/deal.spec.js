@@ -2,7 +2,7 @@ const request = require('request');
 const chai = require('chai');
 
 const { expect } = chai;
-const { API_URL, API_ROOT, API_USER } = require('./config');
+const { API_URL, API_ROOT } = require('./config');
 
 describe('Deal test', () => {
   // List
@@ -13,7 +13,7 @@ describe('Deal test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/1`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -34,7 +34,7 @@ describe('Deal test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/99`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -57,12 +57,11 @@ describe('Deal test', () => {
   describe('Create deal', () => {
     describe('/api/v{n}/deals POST', () => {
       it('Success request', (done) => {
-        const url = `${API_URL}${API_ROOT}/deals`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               type: '2 - Troca',
@@ -92,12 +91,11 @@ describe('Deal test', () => {
         );
       });
       it('Fail request', (done) => {
-        const url = `${API_URL}${API_ROOT}/deals`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               email: 'tiradentes@email.com',
@@ -135,7 +133,7 @@ describe('Deal test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/1`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               description: newDescription,
@@ -160,7 +158,7 @@ describe('Deal test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/99`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               description: newDescription,

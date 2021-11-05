@@ -3,7 +3,7 @@ const db = require('../models');
 const Bid = db.bid;
 
 // Format bid data
-formatBid = (bid) => {
+const formatBid = (bid) => {
   return {
     user_id: bid.user_id,
     accepted: bid.accepted,
@@ -13,20 +13,20 @@ formatBid = (bid) => {
 };
 
 // Find a bid by id
-exports.findOne = (req, res) => {
-  const { bid_id } = req.params;
-  const { deal_id } = req.params;
+const findOne = (req, res) => {
+  const bidId = Number(req.params.bid_id);
+  const dealId = Number(req.params.deal_id);
 
-  Bid.findByPk(bid_id)
+  Bid.findByPk(bidId)
     .then((data) => {
       if (data) {
         // check if provided bid_id belogs to deal_id
-        if (data.deal_id != deal_id) {
+        if (data.deal_id !== dealId) {
           res.status(404).send({
-            error: `Bid with id=${bid_id} does not belongs to Deal with id=${deal_id}.`,
+            error: `Bid with id=${bidId} does not belongs to Deal with id=${dealId}.`,
           });
         } else {
-          formattedBid = formatBid(data);
+          const formattedBid = formatBid(data);
 
           res.send({
             bid: formattedBid,
@@ -34,24 +34,24 @@ exports.findOne = (req, res) => {
         }
       } else {
         res.status(404).send({
-          error: `Bid with id=${bid_id} not found.`,
+          error: `Bid with id=${bidId} not found.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        error: `Error retrieving Bid with id=${bid_id}`,
+        error: `Error retrieving Bid with id=${bidId}`,
       });
     });
 };
 
 // Find bids from a deal
-exports.findByDeal = (req, res) => {
-  const { deal_id } = req.params;
+const findByDeal = (req, res) => {
+  const dealId = req.params.deal_id;
 
   Bid.findAll({
     where: {
-      deal_id,
+      deal_id: dealId,
     },
   })
     .then((result) => {
@@ -60,23 +60,22 @@ exports.findByDeal = (req, res) => {
 
       // formating data to respond
       result.forEach((b) => {
-        formattedBid = formatBid(b);
+        const formattedBid = formatBid(b);
         bids.push({ bid: formattedBid });
       });
 
       res.send(bids);
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).send({
-        error: `Error retrieving Bids with Deal id=${deal_id}`,
+        error: `Error retrieving Bids with Deal id=${dealId}`,
       });
     });
 };
 
 // Create a new bid
-exports.create = (req, res) => {
-  const { deal_id } = req.params;
+const create = (req, res) => {
+  const dealId = req.params.deal_id;
 
   // Save Bid to Database
   Bid.create({
@@ -84,10 +83,10 @@ exports.create = (req, res) => {
     accepted: req.body.accepted,
     value: req.body.value,
     description: req.body.description,
-    deal_id,
+    deal_id: dealId,
   })
     .then((bid) => {
-      formattedBid = formatBid(bid);
+      const formattedBid = formatBid(bid);
 
       res.send({
         bid: formattedBid,
@@ -99,27 +98,27 @@ exports.create = (req, res) => {
 };
 
 // Update a bid by the id and a deal id
-exports.update = (req, res) => {
-  const { bid_id } = req.params;
-  const { deal_id } = req.params;
+const update = (req, res) => {
+  const bidId = Number(req.params.bid_id);
+  const dealId = Number(req.params.deal_id);
 
-  Bid.findByPk(bid_id)
+  Bid.findByPk(bidId)
     .then((data) => {
       if (data) {
         // check if provided bid_id belogs to deal_id
-        if (data.deal_id != deal_id) {
+        if (data.deal_id !== dealId) {
           res.status(404).send({
-            error: `Bid with id=${bid_id} does not belongs to Deal with id=${deal_id}.`,
+            error: `Bid with id=${bidId} does not belongs to Deal with id=${dealId}.`,
           });
         } else {
           // update the record
           Bid.update(req.body, {
-            where: { id: bid_id },
+            where: { id: bidId },
           })
             .then((bid) => {
               // retrieve updated record from database
-              Bid.findByPk(bid_id).then((updatedBid) => {
-                formattedBid = formatBid(updatedBid);
+              Bid.findByPk(bidId).then((updatedBid) => {
+                const formattedBid = formatBid(updatedBid);
 
                 res.send({
                   bid: formattedBid,
@@ -128,20 +127,26 @@ exports.update = (req, res) => {
             })
             .catch((err) => {
               res.status(500).send({
-                error: `Error updating Bid with id=${bid_id}`,
+                error: `Error updating Bid with id=${bidId}`,
               });
             });
         }
       } else {
         res.status(404).send({
-          error: `Bid with id=${bid_id} not found.`,
+          error: `Bid with id=${bidId} not found.`,
         });
       }
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).send({
-        error: `Error retrieving Bid with id=${bid_id}`,
+        error: `Error retrieving Bid with id=${bidId}`,
       });
     });
+};
+
+module.exports = {
+  findOne,
+  findByDeal,
+  create,
+  update,
 };

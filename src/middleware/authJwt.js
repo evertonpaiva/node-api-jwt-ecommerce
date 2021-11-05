@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/auth.config.js');
-const db = require('../models');
+const config = require('../config/auth.config');
 
-const User = db.user;
-
-verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   let token = null;
   // default header
   const tokenBearer = req.headers.authorization;
@@ -21,7 +18,7 @@ verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  return jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       return res.status(401).send({
         error: 'Unauthorized!',

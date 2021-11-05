@@ -1,10 +1,10 @@
+const bcrypt = require('bcryptjs');
 const db = require('../models');
 
 const User = db.user;
-const bcrypt = require('bcryptjs');
 
 // Format user data
-formatUser = (user) => {
+const formatUser = (user) => {
   return {
     id: user.id,
     name: user.name,
@@ -29,7 +29,7 @@ exports.findOne = (req, res) => {
   User.findByPk(id)
     .then((data) => {
       if (data) {
-        formattedUser = formatUser(data);
+        const formattedUser = formatUser(data);
 
         res.send({
           user: formattedUser,
@@ -63,7 +63,7 @@ exports.create = (req, res) => {
     zip_code: req.body.zip_code,
   })
     .then((user) => {
-      formattedUser = formatUser(user);
+      const formattedUser = formatUser(user);
 
       res.send({
         user: formattedUser,
@@ -88,7 +88,7 @@ exports.update = (req, res) => {
           .then((user) => {
             // retrieve updated record from database
             User.findByPk(id).then((updatedUser) => {
-              formattedUser = formatUser(updatedUser);
+              const formattedUser = formatUser(updatedUser);
 
               res.send({
                 user: formattedUser,
@@ -96,7 +96,6 @@ exports.update = (req, res) => {
             });
           })
           .catch((err) => {
-            console.log(err);
             res.status(500).send({
               error: `Error updating User with id=${id}`,
             });

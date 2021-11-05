@@ -1,13 +1,12 @@
+const { calcularPrecoPrazo } = require('correios-brasil');
 const db = require('../models');
 
 const Delivery = db.delivery;
 const Deal = db.deal;
 const User = db.user;
-const { calcularPrecoPrazo } = require('correios-brasil');
-const { delivery } = require('../models');
 
 // Format message data
-formatDelivery = (delivery) => {
+const formatDelivery = (delivery) => {
   return {
     user_id: delivery.user_id,
     deal_id: delivery.user_id,
@@ -19,25 +18,25 @@ formatDelivery = (delivery) => {
   };
 };
 
-shippingCost = async (deal_id, user_id) => {
+const shippingCost = async (dealId, userId) => {
   // get zip code from seller
-  const fromCode = await Deal.findByPk(deal_id)
+  const fromCode = await Deal.findByPk(dealId)
     .then((deal) => {
       if (!deal) {
-        throw new Error(`Error retrieving information from Deal id=${deal_id}`);
+        throw new Error(`Error retrieving information from Deal id=${dealId}`);
       }
 
       return deal.get().zip_code.toString();
     })
     .catch((err) => {
-      throw new Error(`Error retrieving information Deal id=${deal_id}`);
+      throw new Error(`Error retrieving information Deal id=${dealId}`);
     });
 
   // get zip code from buyer
-  const toCode = await User.findByPk(user_id)
+  const toCode = await User.findByPk(userId)
     .then((user) => {
       if (!user) {
-        throw new Error(`Error retrieving information from User id=${user_id}`);
+        throw new Error(`Error retrieving information from User id=${userId}`);
       }
       return user.get().zip_code.toString();
     })
@@ -67,8 +66,8 @@ shippingCost = async (deal_id, user_id) => {
         cost: response[0].Valor.replace(',', '.'),
         days: response[0].PrazoEntrega,
         notes,
-        deal_id,
-        user_id,
+        deal_id: dealId,
+        user_id: userId,
         cep_from: fromCode,
         cep_to: toCode,
       };
@@ -76,16 +75,16 @@ shippingCost = async (deal_id, user_id) => {
       return delivery;
     })
     .catch((err) => {
-      console.log(err);
+      throw new Error(`Error getting shipping cost:${err}`);
     });
 };
 
 // Find shipping cost from a deal
-exports.findShippingCost = async (req, res) => {
-  const { deal_id } = req.params;
-  const user_id = req.userId;
+const findShippingCost = async (req, res) => {
+  const dealId = req.params.deal_id;
+  const { userId } = req;
 
-  shippingCost(deal_id, user_id)
+  shippingCost(dealId, userId)
     .then((delivery) => {
       res.send({
         delivery,
@@ -100,15 +99,15 @@ exports.findShippingCost = async (req, res) => {
 };
 
 // Create a new message
-exports.create = async (req, res) => {
-  const { deal_id } = req.params;
-  const { user_id } = req.body;
+const create = async (req, res) => {
+  const dealId = req.params.deal_id;
+  const userId = req.body.user_id;
 
-  if (!user_id) {
+  if (!userId) {
     res.status(500).send({ error: 'User id is not provided.' });
   }
 
-  const delivery = await shippingCost(deal_id, user_id).catch((err) => {
+  const delivery = await shippingCost(dealId, userId).catch((err) => {
     res.status(500).send({ error: err.message });
   });
 
@@ -122,8 +121,8 @@ exports.create = async (req, res) => {
     days: delivery.days,
     notes: delivery.notes,
   })
-    .then((delivery) => {
-      const formattedDelivery = formatDelivery(delivery);
+    .then((newDelivery) => {
+      const formattedDelivery = formatDelivery(newDelivery);
       res.send({
         delivery: formattedDelivery,
       });
@@ -131,4 +130,9 @@ exports.create = async (req, res) => {
     .catch((err) => {
       res.status(500).send({ error: err.message });
     });
+};
+
+module.exports = {
+  findShippingCost,
+  create,
 };

@@ -1,11 +1,11 @@
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 const db = require('../models');
 const config = require('../config/auth.config');
 
 const User = db.user;
 const Token = db.token;
-
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 
 exports.signin = (req, res) => {
   User.findOne({
@@ -33,7 +33,7 @@ exports.signin = (req, res) => {
         expiresIn: 86400, // 24 hours
       });
 
-      res.status(200).send({
+      return res.status(200).send({
         token,
         user,
       });
@@ -54,7 +54,7 @@ exports.ssoSignin = (req, res) => {
         return res.status(404).send({ error: 'User Not found.' });
       }
 
-      Token.findOne({
+      return Token.findOne({
         where: {
           token: req.body.app_token,
         },
@@ -64,7 +64,7 @@ exports.ssoSignin = (req, res) => {
             return res.status(404).send({ error: 'Token not found.' });
           }
 
-          if (token.user_id != user.id) {
+          if (token.user_id !== user.id) {
             return res
               .status(401)
               .send({ error: 'The provided token does not belongs to user.' });
@@ -76,12 +76,12 @@ exports.ssoSignin = (req, res) => {
               .send({ error: 'The provided token is not active.' });
           }
 
-          var token = jwt.sign({ id: user.id }, config.secret, {
+          const generatedToken = jwt.sign({ id: user.id }, config.secret, {
             expiresIn: 86400, // 24 hours
           });
 
-          res.status(200).send({
-            token,
+          return res.status(200).send({
+            token: generatedToken,
             user,
           });
         })

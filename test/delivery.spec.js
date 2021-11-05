@@ -2,7 +2,7 @@ const request = require('request');
 const chai = require('chai');
 
 const { expect } = chai;
-const { API_URL, API_ROOT, API_USER } = require('./config');
+const { API_URL, API_ROOT } = require('./config');
 
 describe('Delivery test', () => {
   // List all deliveries by deal
@@ -13,7 +13,7 @@ describe('Delivery test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/1/deliveries`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -35,7 +35,7 @@ describe('Delivery test', () => {
           {
             url: `${API_URL}${API_ROOT}/deals/99/deliveries`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -58,12 +58,11 @@ describe('Delivery test', () => {
   describe('Create delivery', () => {
     describe('/api/v{n}/deals/{ID}/deliveries POST', () => {
       it('Success request', (done) => {
-        const url = `${API_URL}${API_ROOT}/deals/1/deliveries`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/deliveries`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               user_id: 2,
@@ -82,12 +81,11 @@ describe('Delivery test', () => {
         );
       });
       it('Fail request', (done) => {
-        const url = `${API_URL}${API_ROOT}/deliveries`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/deals/1/deliveries`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               accepted: 0,

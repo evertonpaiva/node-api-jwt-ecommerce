@@ -4,7 +4,7 @@ const Invite = db.invite;
 const User = db.user;
 
 // Format invite data
-formatInvite = (invite) => {
+const formatInvite = (invite) => {
   return {
     name: invite.name,
     email: invite.email,
@@ -15,11 +15,11 @@ formatInvite = (invite) => {
 
 // Find invites from a user
 exports.findByUser = (req, res) => {
-  const user_invited = req.params.user_id;
+  const userInvited = req.params.user_id;
 
   Invite.findAll({
     where: {
-      user_invited,
+      user_invited: userInvited,
     },
   })
     .then((result) => {
@@ -35,17 +35,14 @@ exports.findByUser = (req, res) => {
       res.send(invites);
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).send({
-        error: `Error retrieving Invites with Deal id=${user_id}`,
+        error: `Error retrieving Invites with Deal id=${userInvited}`,
       });
     });
 };
 
 // Create a new invite
 exports.create = (req, res) => {
-  const { user_id } = req.params;
-
   // Create invited user
   User.create({
     name: req.body.name,
@@ -61,7 +58,7 @@ exports.create = (req, res) => {
         user_invited: req.userId,
       })
         .then((invite) => {
-          formattedInvite = formatInvite(invite);
+          const formattedInvite = formatInvite(invite);
           res.send(formattedInvite);
         })
         .catch((err) => {

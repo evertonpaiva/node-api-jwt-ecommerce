@@ -42,7 +42,7 @@ require('./routes/message.routes')(app);
 require('./routes/delivery.routes')(app);
 require('./routes/invite.routes')(app);
 
-module.exports = (async function () {
+module.exports = (async function startServer() {
   console.log('Recreate and populate database');
   await databaseInit(forceDrop, populateData);
 

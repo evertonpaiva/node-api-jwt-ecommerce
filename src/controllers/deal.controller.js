@@ -3,7 +3,7 @@ const db = require('../models');
 const Deal = db.deal;
 
 // Format deal data
-formatDeal = (deal) => {
+const formatDeal = (deal) => {
   return {
     type: deal.type,
     value: deal.value,
@@ -26,13 +26,13 @@ formatDeal = (deal) => {
 };
 
 // Find a deal by id
-exports.findOne = (req, res) => {
+const findOne = (req, res) => {
   const { id } = req.params;
 
   Deal.findByPk(id)
     .then((data) => {
       if (data) {
-        formattedDeal = formatDeal(data);
+        const formattedDeal = formatDeal(data);
 
         res.send({
           deal: formattedDeal,
@@ -51,7 +51,7 @@ exports.findOne = (req, res) => {
 };
 
 // Create a new deal
-exports.create = (req, res) => {
+const create = (req, res) => {
   // Save Deal to Database
   Deal.create({
     type: req.body.type,
@@ -70,7 +70,7 @@ exports.create = (req, res) => {
     user_id: req.userId,
   })
     .then((deal) => {
-      formattedDeal = formatDeal(deal);
+      const formattedDeal = formatDeal(deal);
 
       res.send({
         deal: formattedDeal,
@@ -82,7 +82,7 @@ exports.create = (req, res) => {
 };
 
 // Update a deal by the id in the request
-exports.update = (req, res) => {
+const update = (req, res) => {
   const { id } = req.params;
 
   Deal.findByPk(id)
@@ -95,7 +95,7 @@ exports.update = (req, res) => {
           .then((user) => {
             // retrieve updated record from database
             Deal.findByPk(id).then((updatedDeal) => {
-              formattedDeal = formatDeal(updatedDeal);
+              const formattedDeal = formatDeal(updatedDeal);
 
               res.send({
                 deal: formattedDeal,
@@ -103,7 +103,6 @@ exports.update = (req, res) => {
             });
           })
           .catch((err) => {
-            console.log(err);
             res.status(500).send({
               error: `Error updating Deal with id=${id}`,
             });
@@ -119,4 +118,10 @@ exports.update = (req, res) => {
         error: `Error retrieving User with id=${id}`,
       });
     });
+};
+
+module.exports = {
+  findOne,
+  create,
+  update,
 };

@@ -2,7 +2,7 @@ const request = require('request');
 const chai = require('chai');
 
 const { expect } = chai;
-const { API_URL, API_ROOT, API_USER } = require('./config');
+const { API_URL, API_ROOT } = require('./config');
 
 describe('Invite test', () => {
   // List all invites by user
@@ -13,7 +13,7 @@ describe('Invite test', () => {
           {
             url: `${API_URL}${API_ROOT}/users/1/invites`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -36,7 +36,7 @@ describe('Invite test', () => {
           {
             url: `${API_URL}${API_ROOT}/users/99/invites`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           },
           (err, response, body) => {
@@ -59,12 +59,11 @@ describe('Invite test', () => {
   describe('Create invite', () => {
     describe('/api/v{n}/users/{ID}/invites POST', () => {
       it('Success request', (done) => {
-        const url = `${API_URL}${API_ROOT}/users/1/invites`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users/1/invites`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               name: 'Carmen Miranda',
@@ -85,12 +84,11 @@ describe('Invite test', () => {
         );
       });
       it('Fail request', (done) => {
-        const url = `${API_URL}${API_ROOT}/invites`;
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users/1/invites`,
             headers: {
-              Authorization: `Bearer ${auth_token}`,
+              Authorization: `Bearer ${authToken}`,
             },
             form: {
               accepted: 0,
