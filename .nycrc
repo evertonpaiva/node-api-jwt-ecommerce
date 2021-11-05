@@ -1,0 +1,11 @@
+{
+  "all": true,
+  "exclude": [
+    "coverage",
+    "test/*.js"
+  ],
+  "reporter": [
+    "text",
+    "html"
+  ]
+}
