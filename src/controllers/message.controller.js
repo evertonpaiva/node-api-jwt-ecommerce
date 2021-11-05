@@ -129,7 +129,7 @@ exports.update = (req, res) => {
                 formattedMessage = formatMessage(updatedMessage);
 
                 res.send({
-                  deal: formattedMessage,
+                  message: formattedMessage,
                 });
               });
             })
@@ -141,7 +141,7 @@ exports.update = (req, res) => {
         }
       } else {
         res.status(404).send({
-          error: 'Message with id=' + id + ' not found.',
+          error: 'Message with id=' + message_id + ' not found.',
         });
       }
     })
