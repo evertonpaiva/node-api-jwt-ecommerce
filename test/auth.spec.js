@@ -69,7 +69,29 @@ describe('Auth test', () => {
         );
       });
 
-      it('Wrong user and pass', (done) => {
+      it('Wrong user', (done) => {
+        request.post(
+          {
+            url: `${API_URL}${API_ROOT}/authenticate`,
+            form: {
+              login: 'asdfghjkl',
+              password: 'pass',
+            },
+          },
+          (err, response, body) => {
+            const { error } = JSON.parse(response.body);
+            // status code expected
+            expect(response.statusCode).to.equal(404);
+
+            // data expected
+            expect(error).to.not.be.null;
+
+            done();
+          }
+        );
+      });
+
+      it('Wrong pass', (done) => {
         request.post(
           {
             url: `${API_URL}${API_ROOT}/authenticate`,
