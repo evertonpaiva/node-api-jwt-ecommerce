@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('.');
 const User = db.user;
 const Deal = db.deal;
 const Bid = db.bid;
@@ -7,7 +7,7 @@ const Invite = db.invite;
 const Token = db.token;
 
 // Database inicialization
-exports.initial = async () => {
+const dataInit = async () => {
   console.log('Setting initial data to database');
 
   let firstUser = await User.create({
@@ -171,4 +171,18 @@ exports.initial = async () => {
     .catch((err) => {
       console.log('Error while token creation : ', err);
     });
+};
+
+const databaseInit = async (forceDrop, populateData) => {
+  // force: true will drop the table if it already exists
+  await db.sequelize.sync({ force: forceDrop });
+
+  // populate initial data to database
+  if (populateData) {
+    await dataInit();
+  }
+};
+
+module.exports = {
+  databaseInit,
 };
