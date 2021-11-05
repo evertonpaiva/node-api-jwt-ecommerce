@@ -1,27 +1,24 @@
+const { NODE_ENV } = process.env;
+
+require('dotenv').config({
+  path: NODE_ENV === 'test' ? '.env.test' : '.env',
+});
+
+const { NODE_HOST } = process.env;
+const { NODE_PORT } = process.env;
+const forceDrop = process.env.DATABASE_FORCE_DROP === 'true';
+const populateData = process.env.DATABASE_POPULATE_DATA === 'true';
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-// set port, listen for requests
-const PORT = process.env.PORT || 9090;
-const RESET_DATABASE = process.env.RESET_DATABASE || true;
 
 // database
-const db = require('./models');
-const initial = require('./models/init-db').initial;
-
-// force: true will drop the table if it already exists
-db.sequelize.sync({ force: RESET_DATABASE }).then(() => {
-  console.log('Drop and Resync Database with { force: true }');
-
-  // populate initial data to database
-  if (RESET_DATABASE) {
-    initial();
-  }
-});
+const { databaseInit } = require('./models/init.db');
 
 var corsOptions = {
-  origin: 'http://localhost:9090',
+  origin: `http://${NODE_HOST}:${NODE_PORT}`,
 };
 
 app.use(cors(corsOptions));
@@ -44,6 +41,13 @@ require('./routes/message.routes')(app);
 require('./routes/delivery.routes')(app);
 require('./routes/invite.routes')(app);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+module.exports = (async function () {
+  console.log('Recreate and populate database');
+  await databaseInit(forceDrop, populateData);
+
+  const server = app.listen(NODE_PORT, () => {
+    console.log(`Server is running on port ${NODE_PORT}.`);
+  });
+
+  return server;
+})();
