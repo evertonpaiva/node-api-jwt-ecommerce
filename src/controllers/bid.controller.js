@@ -131,7 +131,7 @@ exports.update = (req, res) => {
                 formattedBid = formatBid(updatedBid);
 
                 res.send({
-                  deal: formattedBid,
+                  bid: formattedBid,
                 });
               });
             })
@@ -143,7 +143,7 @@ exports.update = (req, res) => {
         }
       } else {
         res.status(404).send({
-          error: 'Bid with id=' + id + ' not found.',
+          error: 'Bid with id=' + bid_id + ' not found.',
         });
       }
     })
