@@ -78,11 +78,18 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   const { id } = req.params;
 
+  let formData = req.body;
+
+  // remove empty properties from req
+  Object.keys(formData).forEach(
+    (k) => !formData[k] && formData[k] !== undefined && delete formData[k]
+  );
+
   User.findByPk(id)
     .then((data) => {
       if (data) {
         // update the record
-        User.update(req.body, {
+        User.update(formData, {
           where: { id },
         })
           .then(() => {
