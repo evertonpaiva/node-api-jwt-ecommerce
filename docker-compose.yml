@@ -6,7 +6,7 @@ services:
     container_name: ecommerce-web
     restart: always
     volumes:
-      - .:/usr/src/app
+      - .:/app
     command: npm run start:dev
     ports:
       - '9090:9090'
