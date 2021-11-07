@@ -11,7 +11,7 @@ module.exports = function userRoute(app) {
     next();
   });
 
-  // get user by id
+  // Routes
   app.get('/api/v1/users/:id', [authJwt.verifyToken], controller.findOne);
 
   // create user
