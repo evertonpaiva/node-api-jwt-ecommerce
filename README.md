@@ -21,6 +21,15 @@ Estimativa em horas de desenvolvimento (disponibilidade de 20h/semana):
 | **Total de horas**                | **18:00h**       |
 | **Estimativa de entrega**         | **4 dias úteis** |
 
+## Stack
+
+- PostgreSQL version 13.4
+- Node version 16
+  - Web application framework: express
+  - ORM: sequelize
+  - Tests: nyc, mocha
+  - API docs: swagger
+
 ## Install
 
 ### Pre-requisites
@@ -33,7 +42,7 @@ Estimativa em horas de desenvolvimento (disponibilidade de 20h/semana):
 Go to the root directory project:
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 The services will be avaliable on:
@@ -48,10 +57,24 @@ The services will be avaliable on:
   - Database data: `~/postgres/ecommerce`
 
 - Web server
+
   - URL: [localhost:9090](http://localhost:9090/)
   - user: `evertonpaiva`
   - password: `abc123-`
   - app_token: `f0e21030-1edc-013a-e198-0aa5d4c8e409199476`
+
+- API Documentation
+  - URL: [localhost:9090/api-docs](http://localhost:9090/api-docs)
+
+![Swagger API Documentation example](docs/swagger-example.png)
+
+### Logs
+
+Access the web server logs:
+
+```bash
+docker logs -f ecommerce-web
+```
 
 ### Environments
 
@@ -90,4 +113,8 @@ npm run test:coverage
 exit
 ```
 
-The coverage report will be avaliable ate do `coverage` directory, root dir at this project. Open `index.html` with a browser to visualize.
+![Running tests example](docs/tests-example.png)
+
+The **code coverage report** will be avaliable ate do `coverage` directory, root dir at this project. Open `index.html` with a browser to visualize.
+
+![Code coverage report example](docs/code-coverage-example.png)
