@@ -52,6 +52,11 @@ const findOne = (req, res) => {
 
 // Create a new deal
 const create = (req, res) => {
+  // if photos not is array, convert to array
+  const photos = !Array.isArray(req.body.photos)
+    ? Array(req.body.photos)
+    : req.body.photos;
+
   // Save Deal to Database
   Deal.create({
     type: req.body.type,
@@ -66,7 +71,7 @@ const create = (req, res) => {
     zip_code: req.body.zip_code,
     urgency_type: req.body.urgency_type,
     urgency_limit_date: req.body.urgency_limit_date,
-    photos: req.body.photos,
+    photos: photos,
     user_id: req.userId,
   })
     .then((deal) => {
@@ -85,11 +90,18 @@ const create = (req, res) => {
 const update = (req, res) => {
   const { id } = req.params;
 
+  let formData = req.body;
+
+  // remove empty properties from req
+  Object.keys(formData).forEach(
+    (k) => !formData[k] && formData[k] !== undefined && delete formData[k]
+  );
+
   Deal.findByPk(id)
     .then((data) => {
       if (data) {
         // update the record
-        Deal.update(req.body, {
+        Deal.update(formData, {
           where: { id },
         })
           .then(() => {
