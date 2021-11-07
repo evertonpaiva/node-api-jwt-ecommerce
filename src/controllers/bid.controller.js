@@ -102,6 +102,13 @@ const update = (req, res) => {
   const bidId = Number(req.params.bid_id);
   const dealId = Number(req.params.deal_id);
 
+  let formData = req.body;
+
+  // remove empty properties from req
+  Object.keys(formData).forEach(
+    (k) => !formData[k] && formData[k] !== undefined && delete formData[k]
+  );
+
   Bid.findByPk(bidId)
     .then((data) => {
       if (data) {
@@ -112,7 +119,7 @@ const update = (req, res) => {
           });
         } else {
           // update the record
-          Bid.update(req.body, {
+          Bid.update(formData, {
             where: { id: bidId },
           })
             .then(() => {
