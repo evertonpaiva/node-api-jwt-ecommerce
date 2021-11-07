@@ -1,4 +1,4 @@
 {
-  "ext": "js,json",
+  "ext": "js,json,yml,yaml",
   "ignore": []
 }
