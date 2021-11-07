@@ -100,6 +100,13 @@ exports.update = (req, res) => {
   const messageId = Number(req.params.message_id);
   const dealId = Number(req.params.deal_id);
 
+  let formData = req.body;
+
+  // remove empty properties from req
+  Object.keys(formData).forEach(
+    (k) => !formData[k] && formData[k] !== undefined && delete formData[k]
+  );
+
   Message.findByPk(messageId)
     .then((data) => {
       if (data) {
@@ -110,7 +117,7 @@ exports.update = (req, res) => {
           });
         } else {
           // update the record
-          Message.update(req.body, {
+          Message.update(formData, {
             where: { id: messageId },
           })
             .then(() => {
