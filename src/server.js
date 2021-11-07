@@ -12,6 +12,10 @@ const populateData = process.env.DATABASE_POPULATE_DATA === 'true';
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+
+const swaggerConfig = YAML.load('swagger-config.yaml');
 
 const app = express();
 
@@ -28,7 +32,7 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// simple route
+// Routes
 app.get('/', (req, res) => {
   res.json({ message: 'Express API is Ready' });
 });
@@ -41,6 +45,9 @@ require('./routes/bid.routes')(app);
 require('./routes/message.routes')(app);
 require('./routes/delivery.routes')(app);
 require('./routes/invite.routes')(app);
+
+// docs route
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 module.exports = (async function startServer() {
   console.log('Recreate and populate database');
