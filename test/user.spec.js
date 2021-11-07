@@ -120,7 +120,7 @@ describe('User test', () => {
           }
         );
       });
-      it('Fail request - duplicate email', (done) => {
+      it('Fail request - duplicated email', (done) => {
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users`,
@@ -152,7 +152,7 @@ describe('User test', () => {
           }
         );
       });
-      it('Fail request - duplicate user', (done) => {
+      it('Fail request - duplicated user', (done) => {
         request.post(
           {
             url: `${API_URL}${API_ROOT}/users`,
