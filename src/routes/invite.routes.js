@@ -10,6 +10,9 @@ module.exports = function inviteRoute(app) {
     next();
   });
 
+  // get invite by id and user id
+  app.get('/api/v1/users/:user_id/invites/:invite_id', [], controller.findOne);
+
   // get invites from a user id
   app.get('/api/v1/users/:user_id/invites', [], controller.findByUser);
 
@@ -18,5 +21,12 @@ module.exports = function inviteRoute(app) {
     '/api/v1/users/:user_id/invites',
     [authJwt.verifyToken],
     controller.create
+  );
+
+  // update a invite with id and user id
+  app.put(
+    '/api/v1/users/:user_id/invites/:invite_id',
+    [authJwt.verifyToken],
+    controller.update
   );
 };

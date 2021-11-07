@@ -13,6 +13,32 @@ const formatInvite = (invite) => {
   };
 };
 
+// Find a invite by id
+exports.findOne = (req, res) => {
+  const inviteId = Number(req.params.invite_id);
+  const userId = Number(req.params.user_id);
+
+  Invite.findByPk(inviteId)
+    .then((data) => {
+      if (data) {
+        const formattedInvite = formatInvite(data);
+
+        res.send({
+          invite: formattedInvite,
+        });
+      } else {
+        res.status(404).send({
+          error: `Invite with id=${inviteId} not found.`,
+        });
+      }
+    })
+    .catch(() => {
+      res.status(500).send({
+        error: `Error retrieving Invite with id=${inviteId}`,
+      });
+    });
+};
+
 // Find invites from a user
 exports.findByUser = (req, res) => {
   const userInvited = req.params.user_id;
@@ -67,5 +93,52 @@ exports.create = (req, res) => {
     })
     .catch(() => {
       res.status(500).send({ error: 'Failed to create user invited' });
+    });
+};
+
+// Update a invite by the id and a user id
+exports.update = (req, res) => {
+  const inviteId = Number(req.params.invite_id);
+  const userId = Number(req.params.user_id);
+
+  let formData = req.body;
+
+  // remove empty properties from req
+  Object.keys(formData).forEach(
+    (k) => !formData[k] && formData[k] !== undefined && delete formData[k]
+  );
+
+  Invite.findByPk(inviteId)
+    .then((data) => {
+      if (data) {
+        // update the record
+        Invite.update(formData, {
+          where: { id: inviteId },
+        })
+          .then(() => {
+            // retrieve updated record from database
+            Invite.findByPk(inviteId).then((updatedInvite) => {
+              const formattedInvite = formatInvite(updatedInvite);
+
+              res.send({
+                invite: formattedInvite,
+              });
+            });
+          })
+          .catch(() => {
+            res.status(500).send({
+              error: `Error updating Invite with id=${inviteId}`,
+            });
+          });
+      } else {
+        res.status(404).send({
+          error: `Invite with id=${inviteId} not found.`,
+        });
+      }
+    })
+    .catch(() => {
+      res.status(500).send({
+        error: `Error retrieving Invite with id=${inviteId}`,
+      });
     });
 };
