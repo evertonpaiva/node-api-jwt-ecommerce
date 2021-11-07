@@ -1,0 +1,885 @@
+openapi: 3.0.1
+
+info:
+  description: 'Loja virtual de venda, compra e troca de equipamentos de tecnologia.'
+  version: '1.0.0'
+  title: 'e-commerce vende e compra'
+  contact:
+    name: 'Everton Paiva'
+    email: 'evertonpaiva@gmail.com'
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - url: http://localhost:{port}/api/v{apiVersion}
+    description: 'Development server'
+    variables:
+      port:
+        default: '9090'
+      apiVersion:
+        default: '1'
+        enum:
+          - '1'
+
+tags:
+  - name: 'Auth'
+    description: 'User login to the application'
+  - name: 'User'
+    description: 'System users'
+  - name: 'Deal'
+    description: 'Product deals'
+  - name: 'Bid'
+    description: 'Bids of the deals'
+  - name: 'Message'
+    description: 'Messages of the deal'
+  - name: 'Delivery'
+    description: 'Deliveries of the deal'
+  - name: 'Invite'
+    description: 'Invite for a new user'
+
+schemes:
+  - 'http'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, for documentation purposes only
+
+paths:
+  # --- Auth --- #
+  /authenticate:
+    post:
+      tags:
+        - 'Auth'
+      summary: 'Try to authenticate, user and password'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  default: 'evertonpaiva'
+                password:
+                  type: string
+                  default: 'abc123-'
+              required:
+                - login
+                - password
+      responses:
+        '200':
+          description: 'successful login'
+        '401':
+          description: 'fail to authenticate'
+        '500':
+          description: 'server error'
+  /authenticate/sso:
+    post:
+      tags:
+        - 'Auth'
+      summary: 'Try to authenticate, SSO auth'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  default: 'evertonpaiva'
+                app_token:
+                  type: string
+                  default: 'f0e21030-1edc-013a-e198-0aa5d4c8e409199476'
+              required:
+                - login
+                - app_token
+      responses:
+        '200':
+          description: 'successful login'
+        '401':
+          description: 'fail to authenticate'
+        '500':
+          description: 'server error'
+
+  # --- User --- #
+  /users/{userId}:
+    get:
+      tags:
+        - 'User'
+      summary: 'List user by id'
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'ID of user to return'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+          schema:
+            $ref: '#/definitions/User'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /users:
+    post:
+      tags:
+        - 'User'
+      summary: 'Create user'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: 'João da Silva'
+                email:
+                  type: string
+                  default: 'joao-da-silva@gmail.com'
+                login:
+                  type: string
+                  default: 'joao.silva'
+                password:
+                  type: string
+                  defaukt: 'cba123-'
+                lat:
+                  type: number
+                  default: 34.9367
+                lng:
+                  type: number
+                  default: -29.2759
+                address:
+                  tyoe: string
+                  default: 'Rua do João'
+                city:
+                  type: string
+                  default: 'Joãolândia'
+                state:
+                  type: string
+                  default: 'SP'
+                zip_code:
+                  type: string
+                  default: '50100000'
+              required:
+                - name
+                - email
+      responses:
+        '200':
+          description: 'successful create'
+        '400':
+          description: 'duplicated email or user'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'create fail'
+      security:
+        - bearerAuth: []
+
+  /users/{userIdUpdate}:
+    put:
+      tags:
+        - 'User'
+      summary: 'Update user'
+      parameters:
+        - name: 'userIdUpdate'
+          in: 'path'
+          description: 'ID of user'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: 'Roberto Carlos'
+                email:
+                  type: string
+                  default: 'roberto-carlos@email.com'
+                login:
+                  type: string
+                password:
+                  type: string
+                lat:
+                  type: number
+                lng:
+                  type: number
+                address:
+                  tyoe: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zip_code:
+                  type: string
+              required:
+                - name
+                - email
+      responses:
+        '200':
+          description: 'successful edit'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'edit fail'
+      security:
+        - bearerAuth: []
+
+  # --- Deal --- #
+  /deals/{dealId}:
+    get:
+      tags:
+        - 'Deal'
+      summary: 'List deal by id'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal to return'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /deals:
+    post:
+      tags:
+        - 'Deal'
+      summary: 'Create deal'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - '1 - Venda'
+                    - '2 - Troca'
+                    - '3 - Desejo'
+                  default: '1 - Venda'
+                value:
+                  type: number
+                  default: 200.50
+                description:
+                  type: string
+                  default: 'SSD 1TB Kingston'
+                lat:
+                  type: number
+                  default: 73.4872
+                lng:
+                  type: number
+                  default: -29.2759
+                address:
+                  tyoe: string
+                  default: 'Rua do João'
+                city:
+                  type: string
+                  default: 'Joãolândia'
+                state:
+                  type: string
+                  default: 'SP'
+                zip_code:
+                  type: string
+                  default: '50100000'
+                urgency_type:
+                  type: string
+                  enum:
+                    - '1 - Baixa'
+                    - '2 - Média'
+                    - '3 - Alta'
+                    - '4 - Data'
+                  default: '1 - Baixa'
+                photos:
+                  type: array
+                  default: ['ssd-1.jpg', 'ssd-2.jpg']
+              required:
+                - type
+                - value
+                - description
+                - lat
+                - lng
+                - address
+                - city
+                - state
+                - zip_code
+                - urgency_type
+      responses:
+        '200':
+          description: 'successful create'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'create fail'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealIdUpdate}:
+    put:
+      tags:
+        - 'Deal'
+      summary: 'Update deal'
+      parameters:
+        - name: 'dealIdUpdate'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - '1 - Venda'
+                    - '2 - Troca'
+                    - '3 - Desejo'
+                  default: '2 - Troca'
+                value:
+                  type: number
+                  default: 500
+                description:
+                  type: string
+                  default: 'Monitor LG LED 42'
+                lat:
+                  type: number
+                lng:
+                  type: number
+                address:
+                  tyoe: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zip_code:
+                  type: string
+                urgency_type:
+                  type: string
+                  enum:
+                    - '1 - Baixa'
+                    - '2 - Média'
+                    - '3 - Alta'
+                    - '4 - Data'
+                  default: '3 - Alta'
+                photos:
+                  type: array
+      responses:
+        '200':
+          description: 'successful edit'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'edit fail'
+      security:
+        - bearerAuth: []
+
+  # --- Bid --- #
+  /deals/{dealId}/bids/{bidId}:
+    get:
+      tags:
+        - 'Bid'
+      summary: 'List bid by id'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+        - name: 'bidId'
+          in: 'path'
+          description: 'ID of bid'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealId}/bids:
+    get:
+      tags:
+        - 'Bid'
+      summary: 'List bids of a deal'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealIdCreate}/bids:
+    post:
+      tags:
+        - 'Bid'
+      summary: 'Create bid'
+      parameters:
+        - name: 'dealIdCreate'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                accepted:
+                  type: boolean
+                  default: false
+                value:
+                  type: number
+                  default: 10.36
+                description:
+                  type: string
+                  default: 'Pagamento via Pix'
+                user_id:
+                  type: number
+                  default: 2
+              required:
+                - value
+                - description
+                - user_id
+      responses:
+        '200':
+          description: 'successful create'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'create fail'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealIdUpdate}/bids/{bidIdUpdate}:
+    put:
+      tags:
+        - 'Bid'
+      summary: 'Update bid'
+      parameters:
+        - name: 'dealIdUpdate'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+        - name: 'bidIdUpdate'
+          in: 'path'
+          description: 'ID of bid'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                accepted:
+                  type: boolean
+                  default: false
+                value:
+                  type: number
+                description:
+                  type: string
+                  default: 'Pagamento via cheque'
+                user_id:
+                  type: number
+      responses:
+        '200':
+          description: 'successful edit'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'edit fail'
+      security:
+        - bearerAuth: []
+
+  # --- Message --- #
+  /deals/{dealId}/messages/{messageId}:
+    get:
+      tags:
+        - 'Message'
+      summary: 'List message by id'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+        - name: 'messageId'
+          in: 'path'
+          description: 'ID of message'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealId}/messages:
+    get:
+      tags:
+        - 'Message'
+      summary: 'List messages of a deal'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealIdCreate}/messages:
+    post:
+      tags:
+        - 'Message'
+      summary: 'Create message'
+      parameters:
+        - name: 'dealIdCreate'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: number
+                  default: 2
+                title:
+                  type: string
+                  default: 'Dúvida sobre o produto'
+                message:
+                  type: string
+                  default: 'Gostaria de saber se o produto funciona também em 220V?'
+              required:
+                - user_id
+                - title
+                - message
+      responses:
+        '200':
+          description: 'successful create'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'create fail'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealIdUpdate}/messages/{messageIdUpdate}:
+    put:
+      tags:
+        - 'Message'
+      summary: 'Update message'
+      parameters:
+        - name: 'dealIdUpdate'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+        - name: 'messageIdUpdate'
+          in: 'path'
+          description: 'ID of message'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: number
+                title:
+                  type: string
+                message:
+                  type: string
+                  default: 'O produto ainda está disponível'
+      responses:
+        '200':
+          description: 'successful edit'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'edit fail'
+      security:
+        - bearerAuth: []
+
+  # --- Delivery --- #
+  /deals/{dealId}/deliveries:
+    get:
+      tags:
+        - 'Delivery'
+      summary: 'List deliveries of a deal'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /deals/{dealIdCreate}/deliveries:
+    post:
+      tags:
+        - 'Delivery'
+      summary: 'Create delivery'
+      parameters:
+        - name: 'dealIdCreate'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: number
+                  default: 2
+              required:
+                - user_id
+      responses:
+        '200':
+          description: 'successful create'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'create fail'
+      security:
+        - bearerAuth: []
+
+  # --- Invite --- #
+  /users/{dealId}/invites/{inviteId}:
+    get:
+      tags:
+        - 'Invite'
+      summary: 'List invite by id'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+        - name: 'inviteId'
+          in: 'path'
+          description: 'ID of invite'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /users/{dealId}/invites:
+    get:
+      tags:
+        - 'Invite'
+      summary: 'List invites of a deal'
+      parameters:
+        - name: 'dealId'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      responses:
+        '200':
+          description: 'successful response'
+        '403':
+          description: 'unauthenticated or token not provided'
+        '500':
+          description: 'server error'
+      security:
+        - bearerAuth: []
+
+  /users/{dealIdCreate}/invites:
+    post:
+      tags:
+        - 'Invite'
+      summary: 'Create invite'
+      parameters:
+        - name: 'dealIdCreate'
+          in: 'path'
+          description: 'ID of deal'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: 'Carmen Miranda'
+                email:
+                  type: string
+                  default: 'carmenmiranda@email.com'
+              required:
+                - name
+                - email
+      responses:
+        '200':
+          description: 'successful create'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'create fail'
+      security:
+        - bearerAuth: []
+
+  /users/{userIdUpdate}/invites/{inviteIdUpdate}:
+    put:
+      tags:
+        - 'Invite'
+      summary: 'Update invite'
+      parameters:
+        - name: 'userIdUpdate'
+          in: 'path'
+          description: 'ID of user'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+        - name: 'inviteIdUpdate'
+          in: 'path'
+          description: 'ID of invite'
+          required: true
+          type: 'integer'
+          format: 'int64'
+          default: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: 'Rubens Barrichello'
+                email:
+                  type: string
+                  default: 'rubens-barrichello@email.com'
+                user:
+                  type: number
+                user_invited:
+                  type: number
+      responses:
+        '200':
+          description: 'successful edit'
+        '403':
+          description: 'forbidden access'
+        '500':
+          description: 'edit fail'
+      security:
+        - bearerAuth: []
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjM2MjI5NTI4LCJleHAiOjE2MzYzMTU5Mjh9.o7dqEG8e--DvdPwKzKX0xQLwuWu9XoZRG-5SguHEKUg
