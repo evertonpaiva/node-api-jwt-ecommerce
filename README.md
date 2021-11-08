@@ -2,6 +2,19 @@
 
 Site ecommerce para venda e troca de produtos de tecnologia de forma rápida, otimizando seus custos com estruturas de trabalho.
 
+## Summary
+
+- [Ecommerce Venda e Troca](#ecommerce-venda-e-troca)
+  - [Summary](#summary)
+  - [Estimativa de desenvolvimento](#estimativa-de-desenvolvimento)
+  - [Stack](#stack)
+  - [Install](#install)
+    - [Pre-requisites](#pre-requisites)
+    - [Starting the appication](#starting-the-appication)
+    - [Logs](#logs)
+    - [Environments](#environments)
+  - [Tests](#tests)
+
 ## Estimativa de desenvolvimento
 
 Estimativa em horas de desenvolvimento (disponibilidade de 20h/semana):
@@ -39,7 +52,15 @@ Estimativa em horas de desenvolvimento (disponibilidade de 20h/semana):
 
 ### Starting the appication
 
-Go to the root directory project:
+Go to the project root directory.
+
+Install node dependencies:
+
+```bash
+docker run --rm -v ${PWD}:/app -w=/app node:16 npm install
+```
+
+Start the stack:
 
 ```bash
 docker-compose up -d --build
@@ -65,6 +86,8 @@ The services will be avaliable on:
 
 - API Documentation
   - URL: [localhost:9090/api-docs](http://localhost:9090/api-docs)
+
+_Swagger API Documentation example:_
 
 ![Swagger API Documentation example](docs/swagger-example.png)
 
@@ -113,8 +136,12 @@ npm run test:coverage
 exit
 ```
 
+_Running tests example:_
+
 ![Running tests example](docs/tests-example.png)
 
 The **code coverage report** will be avaliable ate do `coverage` directory, root dir at this project. Open `index.html` with a browser to visualize.
+
+_Code coverage report example:_
 
 ![Code coverage report example](docs/code-coverage-example.png)
